@@ -43,7 +43,7 @@ module Decidim
           #}
           command_output = system(command)
           if command_output == true
-              @logger.info "Command Worked"
+              puts "Command Worked"
           else
               raise "The command has failed"
           end
@@ -67,7 +67,7 @@ module Decidim
       public
       def run_pg_dump
         begin
-          logger.info "Running pg_dump"
+          # logger.info "Running pg_dump"
           dump_file_name = "#@db_name-#@date.dump"
           pg_dump_command = "pg_dump -Fc -d #{db_config} -f #@local_backup_path/#{dump_file_name}"
           exec_command(pg_dump_command)
@@ -81,7 +81,7 @@ module Decidim
       public
       def run_file_system_backup
         begin
-          logger.info "Running run_file_system_backup"
+          # logger.info "Running run_file_system_backup"
           tar_file_name = "#@uploads_path_name-#@date.tgz"
           tar_command = "tar -czf #@local_backup_path/#{tar_file_name} #@uploads_path"
           exec_command(tar_command)
