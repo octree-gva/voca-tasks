@@ -1,5 +1,10 @@
 
 FROM git.octree.ch:4567/decidim/vocacity/docker/dev-0.24:latest
+LABEL version="0.24"
+LABEL description="Ruby alpine image with a decidim. \
+Ready for building assets, and running decidim tasks."
+LABEL license="AGPL-3.0"
+
 ENV DECIDIM_PROCESS="sidekiq"
 
 # Set work directory
