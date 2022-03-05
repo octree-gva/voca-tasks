@@ -12,101 +12,118 @@ module Decidim
   # allows users to create vocacity_gem_tasks in a participatory space.
   module VocacityGemTasks
     class AppBackup
-      private
-      attr_reader :logger, :date, :db_host, :db_user, :db_pass, :db_name, :uploads_path, :uploads_path_name, :tmp_backup, :vocacity_bucket
-
-      public
       def initialize
-
-        # workaround for init logger
-        Rails.logger = Logger.new("log/development.log")
-
-        @logger = Rails.logger
-        
-        @logger.info "Init AppBackup"
-        
-        time = Time.new
-        @date = time.strftime("%Y-%m-%d_%H-%M-%S")
-        
-        @db_host = ENV.fetch("DATABASE_HOST")
-        @db_user = ENV.fetch("DATABASE_USERNAME")
-        @db_pass = ENV.fetch("DATABASE_PASSWORD")
-        @db_name = ENV.fetch('DATABASE_DATABASE')
-        @db_url = "postgres://#@db_user:#@db_pass@#@db_host:5432/#@db_name"
-        @uploads_path = ENV.fetch('RAILS_ROOT') + "/public/uploads"
-        @uploads_path_name = @uploads_path.split("/")[-1]
-        @tmp_backup = ENV.fetch('RAILS_ROOT') + "/decidim-module-vocacity_gem_tasks/tmp_backup"
-        # @vocacity_bucket = ENV.fetch('VOCACITY_BUCKET')
+        logger.info "⚙️ starts backup (##{now})"
         check_pgpass
+      end
+
+      def backup_db!
+        logger.debug "Running backup_db!"
+        with_backup_dir do |backup_dir|
+          db_host = ENV.fetch("DATABASE_HOST")
+          db_user = ENV.fetch("DATABASE_USERNAME")
+          db_pass = ENV.fetch("DATABASE_PASSWORD")
+          db_name = ENV.fetch('DATABASE_DATABASE')
+
+          dump_file = "#{backup_dir}/#{db_name}-#{now}.dump"
+          exec_command!("pg_dump -v -Fc \
+            -d #{db_name} -h #{db_host} -U #{db_user} -w \
+            -f #{dump_file}")
+
+          gzip_file! "#{dump_file}"
+          logger.info "⚙️ backup db: #{dump_file}"
+        end
+      rescue Exception => e
+        logger.error e.message
+        raise e
+      end
+
+      def backup_uploads!
+        logger.debug "Running backup_uploads!"
+        with_backup_dir do |backup_dir| 
+          compressed_file = "#{backup_dir}/#{uploads_path_name}-#{now}.tar.gz"
+          tar_file!("#{uploads_path}", "#{compressed_file}")
+          logger.info "⚙️ backup uploads: #{compressed_file}"
+        end
+      rescue Exception => e
+        logger.error e.message
+        raise e
       end
 
       private
       def check_pgpass
         # Check /root/.pgpass exists if not create it
-        File.open("/root/.pgpass", "w") { |f| 
-          f.write("#@db_host:*:#@db_name:#@db_user:#@db_pass")
+        File.open("/root/.pgpass", "w") do |f| 
+          db_host = ENV.fetch("DATABASE_HOST")
+          db_user = ENV.fetch("DATABASE_USERNAME")
+          db_pass = ENV.fetch("DATABASE_PASSWORD")
+          db_name = ENV.fetch('DATABASE_DATABASE')
+          f.write("#{db_host}:*:#{db_name}:#{db_user}:#{db_pass}")
           f.chmod(0600)
-        } unless File.exists?("/root/.pgpass")
+        end unless File.exists?("/root/.pgpass")
       end
 
-      private
-      def exec_command(command)
-        begin
-          @logger.info "Exec Command"
+      def exec_command!(command)
+        logger.debug "exec '#{command}'"
+        command_output = system(command)
+        if command_output == true
+          logger.debug "The command: #{command} has worked"
+        else
+            raise "The command: #{command} has failed"
+        end
+      rescue Exception => e
+        logger.error e.message
+        raise e
+      end
 
-          command_output = system(command)
-          if command_output == true
-            @logger.info "The command: #{command} has worked"
-          else
-              raise "The command: #{command} has failed"
-          end
-        rescue Exception => e
-          @logger.error e.message
+      def with_backup_dir(&block)
+        @backup_dir ||= "#{ENV.fetch('RAILS_ROOT')}/decidim-module-vocacity_gem_tasks/backup_dir"
+        backup_dir = @backup_dir
+        Dir.mkdir(backup_dir) unless Dir.exists?(backup_dir)
+        if Dir.exists?(backup_dir)
+          block.call(backup_dir)
+        else
+          raise "Fails to create #{backup_dir}"
         end
       end
 
-      private
-      def compress_file(file)
-        begin
-          if File.exists?(file)
-            compress_command = "gzip #{file}"
-            exec_command(compress_command)
-          else
-            raise "File #{file} doesn't exists"
-          end
-        rescue Exception => e
-          @logger.error e.message
+      def gzip_file!(file)
+        if File.exists?(file)
+          compress_command = "gzip #{file}"
+          exec_command!(compress_command)
+        else
+          raise "File #{file} doesn't exists"
         end
+      rescue Exception => e
+        logger.error e.message
+        raise e
       end
 
-      public
-      def run_pg_dump
-        begin
-          @logger.info "Running pg_dump"
-          Dir.mkdir(@tmp_backup) unless Dir.exists?(@tmp_backup)
-          if Dir.exists?(@tmp_backup)
-            dump_file_name = "#@db_name-#@date.dump"
-            pg_dump_command = "pg_dump -v -Fc -d #@db_name -h #@db_host -U #@db_user -w -f #@tmp_backup/#{dump_file_name}"
-            exec_command(pg_dump_command)
-            compress_file("#@tmp_backup/#{dump_file_name}")
-          else
-            raise "Dir #@tmp_backup doesn't exists"
-          end
-        rescue Exception => e
-          @logger.error e.message
-        end
+      def tar_file!(source, destination)
+        exec_command! "tar -czf #{destination} #{source}"
+      rescue Exception => e
+        logger.error "can not tar file."
+        logger.error e.message
+        raise e
+      end
+      ##
+      # Define logger for the class.
+      def logger
+        @logger ||= Rails.logger
       end
 
-      public
-      def run_file_system_backup
-        begin
-          @logger.info "Running run_file_system_backup"
-          tar_file_name = "#@uploads_path_name-#@date.tar.gz"
-          tar_command = "tar -czf #@tmp_backup/#{tar_file_name} #@uploads_path"
-          exec_command(tar_command)
-        rescue Exception => e
-          @logger.error e.message
-        end
+      ##
+      # Time at the start of the backup task
+      def now
+        @now ||= Time.new.strftime("%Y-%m-%d_%H-%M-%S")
+      end
+
+      def uploads_path
+        @uploads_path ||= ENV.fetch('RAILS_ROOT') + "/public/uploads"
+      end
+
+      def uploads_path_name
+        @uploads_path_name ||= uploads_path.split("/")[-1]
       end
     end
   end
