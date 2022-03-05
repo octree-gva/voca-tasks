@@ -1,0 +1,49 @@
+services:
+  app:
+    build: .
+    environment:
+      - DATABASE_HOST=pg
+      - SECRET_KEY_BASE=DEV-CuF9oeNaep5deic2thiNg7cee8bae9Cho2eSoNaegh2sae4Pohmiu5roh2aingohpheeleeYei4eoTae2eileichil6ahtaiZaG7weexah8Das9risheiYai3TeeGoY3
+      - DATABASE_USERNAME=decidim
+      - DATABASE_PASSWORD=DEV-baeGhi4Ohtahcee5eejoaxaiwaezaiGo
+      - DATABASE_DATABASE=decidim_dev
+      - RAILS_ENV=development
+      - RACK_ENV=development
+      - PORT=3000
+      - RAILS_MAX_THREADS=1
+      - RAILS_SERVE_STATIC_FILES=true
+      - RAILS_LOG_TO_STDOUT=enabled
+      - RAILS_JOB_MODE=sidekiq
+      - JOB_REDIS_URL=redis://redis:6379/1
+
+
+    ports:
+      - 3000:3000
+    depends_on:
+      - pg
+      - redis
+    links:
+      - pg
+      - redis
+    networks:
+      - private
+      - default
+    volumes:
+      - .:/home/decidim/app/decidim-module-vocacity_gem_tasks
+  redis:
+    image: redis:latest
+  pg:
+    image: postgres:12
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=DEV-baeGhi4Ohtahcee5eejoaxaiwaezaiGo
+      - POSTGRES_USER=decidim
+      - POSTGRES_DB=decidim_dev
+    networks:
+      - private
+volumes:
+  pg-data: {}
+networks:
+  private:
+    internal: true

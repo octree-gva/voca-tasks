@@ -1,0 +1,5 @@
+gitlab-ci.yml
+.git
+.gitignore
+.DS_Store
+README.md
