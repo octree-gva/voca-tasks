@@ -10,9 +10,9 @@ namespace :vocacity do
   desc "Backup Decidim Resources"
   task backup: :environment do
     backup_runner = Decidim::VocacityGemTasks::AppBackup.new
-    backup_runner.backup_db!
-    backup_runner.backup_uploads!
-    Rails.logger.info "⚙️ vocacity:backup done."
+    backup_file = backup_runner.run!
+
+    Rails.logger.info "⚙️ vocacity:backup done. (#{backup_file})"
   end
 
 end

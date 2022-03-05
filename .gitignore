@@ -19,3 +19,4 @@ development_app
 # files
 *.dump
 *.gz
+.DS_Store
