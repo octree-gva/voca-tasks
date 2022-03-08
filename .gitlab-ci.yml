@@ -1,0 +1,23 @@
+# Import des templates de jobs pré-configurés
+include:
+  - project: o/infra/templates
+    file: /gitlab-ci/includes/jobs.yaml
+
+stages:
+  - test
+  - analyze
+  - version
+  - build
+
+
+🌱:024: 
+  stage: build
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $CI_REGISTRY_IMAGE/decidim-tasks:${CI_COMMIT_TAG:-latest}
+
+
+
