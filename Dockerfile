@@ -27,4 +27,7 @@ RUN echo " " >> Gemfile && echo "  gem \"decidim-vocacity_gem_tasks\", path: \".
 # Install dependancies
 RUN bundle config set with 'development' && bundle install
 
+# Init Rspec inside image
+RUN bundle exec rspec --init
+
 CMD ["bundle", "exec", "sidekiq"]

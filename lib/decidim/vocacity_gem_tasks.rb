@@ -3,7 +3,6 @@
 require "decidim/vocacity_gem_tasks/admin"
 require "decidim/vocacity_gem_tasks/engine"
 require "decidim/vocacity_gem_tasks/admin_engine"
-require "decidim/vocacity_gem_tasks/component"
 
 require "rails"
 
@@ -124,7 +123,8 @@ module Decidim
       # Ensure backup directory exists and then run the given block with
       # backup directory path as argument. 
       def with_backup_dir(&block)
-        @backup_dir ||= "#{Rails.root}/decidim-module-vocacity_gem_tasks/backup_dir"
+        # @backup_dir ||= "#{Rails.root}/decidim-module-vocacity_gem_tasks/backup_dir"
+        @backup_dir ||= "#{ENV.fetch('RAILS_ROOT')}/decidim-module-vocacity_gem_tasks/backup_dir"
         backup_dir = @backup_dir
         Dir.mkdir(backup_dir) unless Dir.exists?(backup_dir)
         if Dir.exists?(backup_dir)
@@ -148,7 +148,8 @@ module Decidim
       ##
       # Define logger for the class.
       def logger
-        @logger ||= Rails.logger
+        # @logger ||= Rails.logger
+        @logger ||= Logger.new($stdout)
       end
 
       ##
@@ -160,7 +161,8 @@ module Decidim
       ##
       # Directory where the user's uploads are.
       def uploads_path
-        @uploads_path ||= "#{Rails.root}/public/uploads"
+        # @uploads_path ||= "#{Rails.root}/public/uploads"
+        @uploads_path ||= "#{ENV.fetch('RAILS_ROOT')}/public/uploads"
       end
     end
   end
