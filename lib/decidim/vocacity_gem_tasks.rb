@@ -4,6 +4,8 @@ require "decidim/vocacity_gem_tasks/admin"
 require "decidim/vocacity_gem_tasks/engine"
 require "decidim/vocacity_gem_tasks/admin_engine"
 
+require 'active_support/core_ext' 
+
 require "rails"
 
 module Decidim
@@ -15,6 +17,7 @@ module Decidim
         logger.info "⚙️ starts backup (##{now})"
         check_pgpass
       end
+
       ##
       # Run a backup of : 
       #   public/uploads
@@ -91,7 +94,7 @@ module Decidim
 
       ##
       # Create if not exists a .pgpass file.
-      # Needed to be able to use pg_dump from this image. 
+      # Needed to be able to use pg_dump from this image.
       def check_pgpass
         # Check /root/.pgpass exists if not create it
         File.open("/root/.pgpass", "w") do |f| 
@@ -161,9 +164,34 @@ module Decidim
       ##
       # Directory where the user's uploads are.
       def uploads_path
-        # @uploads_path ||= "#{Rails.root}/public/uploads"
-        @uploads_path ||= "#{ENV.fetch('RAILS_ROOT')}/public/uploads"
+        @uploads_path ||= "#{Rails.root}/public/uploads"
+        # @uploads_path ||= "#{ENV.fetch('RAILS_ROOT')}/public/uploads"
       end
+    end
+
+    class AppPeriodicalSave
+      
+      def initialize
+        logger.info "⚙️ starts send to S3 (##{now})"
+      end
+
+      def end_of_month
+        @end_of_month ||= DateTime.end_of_month 
+      end
+
+      def end_of_year
+        @end_of_year ||= DateTime.end_of_year 
+      end
+    end
+    
+    class AppSendToS3
+      def initialize
+        logger.info "⚙️ starts send to S3"
+      end
+
+      def check_backup_file
+      end
+    
     end
   end
 end
