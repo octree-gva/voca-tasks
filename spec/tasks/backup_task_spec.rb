@@ -7,6 +7,7 @@ describe "VocacityGemTasks" do
 
   context "when initialize AppBackup" do 
     let(:app_backup) { Decidim::VocacityGemTasks::AppBackup }
+    let(:file) { class_double("File") }
     let(:logger) { instance_double("Logger") }
     let(:backup_runner_stub) { instance_double('Decidim::VocacityGemTasks::AppBackup.new') }
     let(:backup_runner) { Decidim::VocacityGemTasks::AppBackup.new }
@@ -15,18 +16,17 @@ describe "VocacityGemTasks" do
       expect(logger).to receive(:info).with(anything)
     end
 
+    after do
+      expect(file).to receive(:exists?).with(anything)
+    end
+
     it "should inicialize AppBackup" do
       logger.info("mock")
       expect(app_backup).to receive(:new)
       app_backup.new
+      file.exists?("/root/.pgpass")
     end
-    
-    it "should call check_pgpass" do
-      logger.info("mock")
-      expect(backup_runner_stub).to receive(:check_pgpass).and_return(File.exists?("/root/.pgpass"))
-      backup_runner_stub.check_pgpass
-    end
-
+  
     it "should call run!" do
       logger.info("mock")
       expect(backup_runner).to receive(:run!).and_return(/-backup\.tar\.gz/)
