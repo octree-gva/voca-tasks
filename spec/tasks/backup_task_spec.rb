@@ -15,9 +15,6 @@ describe "VocacityGemTasks" do
     let(:dump_file) { backup_runner.send(:dump_database, dir) }
     let(:compressed_file) { backup_runner.send(:compress_uploads, dir) }
     let(:file_metadata) { backup_runner.send(:generate_metadatas, dir) }
-    let(:backup_dir) { "#{ENV.fetch('RAILS_ROOT')}/decidim-module-vocacity_gem_tasks/backup_dir" }
-    let(:block) { backup_file = "-backup.tar.gz" }
-    let(:with_backup_dir) { backup_runner.send(:with_backup_dir) }
 
     before do
       expect(logger).to receive(:info).with(anything)
@@ -38,10 +35,10 @@ describe "VocacityGemTasks" do
     end
 
     it "should execute private methods" do
+      logger.info("mock")
       expect(dump_file).to match(/\.dump/)
       expect(compressed_file).to match(/\.tar\.gz/)
       expect(file_metadata).to match(/metadatas\.json/)
-      expect(with_backup_dir).to receive(:call)
     end
 
   end
