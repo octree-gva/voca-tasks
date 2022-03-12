@@ -164,8 +164,8 @@ module Decidim
       ##
       # Directory where the user's uploads are.
       def uploads_path
-        @uploads_path ||= "#{Rails.root}/public/uploads"
-        # @uploads_path ||= "#{ENV.fetch('RAILS_ROOT')}/public/uploads"
+        # @uploads_path ||= "#{Rails.root}/public/uploads"
+        @uploads_path ||= "#{ENV.fetch('RAILS_ROOT')}/public/uploads"
       end
     end
 
