@@ -2,27 +2,32 @@
 
 require "spec_helper"
 
-require "decidim/vocacity_gem_tasks"
+describe "VocacityGemTasks::AppBackup" do
+  context "#run!" do
+    let(:dir_klass) {class_double("Dir").as_stubbed_const()}
 
-require "rake"
-
-
-describe "AppBackup" do    
-    it "initialize AppBackup" do
-        expect { Decidim::VocacityGemTasks::AppBackup.new }.not_to raise_error
+    it "creates a temp directory" do
+      expect(dir_klass).to receive(:mktmpdir).with(any_args)
+      VocacityGemTasks::AppBackup.new.run!
     end
-end
 
-describe "AppBackup" do    
-    it "run run_pg_dump" do
-        app_backup = Decidim::VocacityGemTasks::AppBackup.new
-        expect { app_backup.run_pg_dump }.not_to raise_error
+    it "dump_database,compress_uploads and generate_metadatas with the fresh dir" do
+      class DirStub
+        def self.mktmpdir(&block)
+          block.call("my-dirname")
+        end
+      end
+      runner = VocacityGemTasks::AppBackup.new
+      expect(runner).to receive(:dump_database).with("my-dirname")
+      expect(runner).to receive(:compress_uploads).with("my-dirname")
+      expect(runner).to receive(:generate_metadatas).with("my-dirname")
+      
+      stub_const("Dir", DirStub)
+      allow(runner).to receive(:dump_database).and_return(nil)
+      allow(runner).to receive(:compress_uploads).and_return(nil)
+      allow(runner).to receive(:generate_metadatas).and_return(nil)
+      allow(runner).to receive(:with_backup_dir).and_return(nil)
+      runner.run!
     end
-end
-
-describe "AppBackup" do    
-    it "run public_upload_backup" do
-        app_backup = Decidim::VocacityGemTasks::AppBackup.new
-        expect { app_backup.run_file_system_backup }.not_to raise_error
-    end
+  end
 end

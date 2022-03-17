@@ -15,7 +15,10 @@ services:
       - RAILS_LOG_TO_STDOUT=enabled
       - RAILS_JOB_MODE=sidekiq
       - JOB_REDIS_URL=redis://redis:6379/1
-
+    volumes:
+      - ./lib:/home/decidim/app/decidim-vocacity_gem_tasks/lib
+      - ./app:/home/decidim/app/decidim-vocacity_gem_tasks/app
+      - ./spec:/home/decidim/app/decidim-vocacity_gem_tasks/spec
 
     ports:
       - 3000:3000
