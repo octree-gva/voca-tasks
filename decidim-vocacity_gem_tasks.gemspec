@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+
 require_relative "lib/vocacity_gem_tasks/version"
 
 Gem::Specification.new do |s|

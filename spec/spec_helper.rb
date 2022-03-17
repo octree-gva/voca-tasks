@@ -2,11 +2,12 @@
 
 
 Bundler.require(:default, :development)
-<<<<<<< HEAD
+
 require "active_support"
 require "decidim/dev"
 require "tmpdir"
 require "vocacity_gem_tasks"
+
 Rails.logger = {}
 ENV["WEBHOOK_HMAC"] = "WEBHOOK_HMAC"
 ENV["WEBHOOK_URL"] = "http://WEBHOOK_URL"
@@ -19,11 +20,7 @@ ENV["DATABASE_PASSWORD"] = "DATABASE_PASSWORD"
 ENV["DATABASE_DATABASE"] = "DATABASE_DATABASE"
 ENV["RAILS_ROOT"] = "RAILS_ROOT"
 
-=======
-require "decidim/dev"
-require "vocacity_gem_tasks"
 Rails.logger = {}
->>>>>>> c541347 (chore: refactor files and splits class.)
 RSpec.configure do |config|
   config.before(:each) do
     allow(Rails.logger).to receive(:info)
