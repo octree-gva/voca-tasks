@@ -1,5 +1,0 @@
-include:
-  - project: o/infra/templates
-    file: /gitlab-ci/includes/StrapiBuildDeploy.yaml
-  - project: o/infra/templates
-    file: /gitlab-ci/includes/jobs.yaml
