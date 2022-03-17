@@ -28,7 +28,6 @@ stages:
     paths:
       - vendor/ruby
   before_script:
-    - export RAILS_ENV=test
     - gem install bundler -v 2.3.6
     - bundle config set path 'vendor/ruby'  
     - RAILS_ENV=development bundle install -j $(nproc)
