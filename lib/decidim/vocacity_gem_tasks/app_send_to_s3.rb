@@ -1,3 +1,4 @@
+module Decidim
  module VocacityGemTasks
    class AppSendToS3
      def initialize
@@ -8,3 +9,4 @@
      end
    end
  end
+end

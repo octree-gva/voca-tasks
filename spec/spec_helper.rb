@@ -6,7 +6,7 @@ Bundler.require(:default, :development)
 require "active_support"
 require "decidim/dev"
 require "tmpdir"
-require "vocacity_gem_tasks"
+require "decidim/vocacity_gem_tasks"
 
 Rails.logger = {}
 ENV["WEBHOOK_HMAC"] = "WEBHOOK_HMAC"

@@ -1,3 +1,4 @@
+module Decidim
 module VocacityGemTasks
   class AppPeriodicalSave
     def initialize
@@ -12,4 +13,5 @@ module VocacityGemTasks
       @end_of_year ||= DateTime.end_of_year
     end
   end
+end
 end

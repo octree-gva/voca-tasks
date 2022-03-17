@@ -8,7 +8,7 @@ describe "VocacityGemTasks::AppBackup" do
 
     it "creates a temp directory" do
       expect(dir_klass).to receive(:mktmpdir).with(any_args)
-      VocacityGemTasks::AppBackup.new.run!
+      Decidim::VocacityGemTasks::AppBackup.new.run!
     end
 
     it "dump_database,compress_uploads and generate_metadatas with the fresh dir" do
@@ -17,7 +17,7 @@ describe "VocacityGemTasks::AppBackup" do
           block.call("my-dirname")
         end
       end
-      runner = VocacityGemTasks::AppBackup.new
+      runner = Decidim::VocacityGemTasks::AppBackup.new
       expect(runner).to receive(:dump_database).with("my-dirname")
       expect(runner).to receive(:compress_uploads).with("my-dirname")
       expect(runner).to receive(:generate_metadatas).with("my-dirname")

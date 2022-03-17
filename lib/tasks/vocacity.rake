@@ -2,8 +2,8 @@ require "decidim/vocacity_gem_tasks"
 
 namespace :vocacity do
   desc """
-    Execute PG_DUMP for decidim database, tar.gz 
-    for $RAILS_ROOT/public/uploads and stores in vocacity 
+    Execute PG_DUMP for decidim database, tar.gz
+    for $RAILS_ROOT/public/uploads and stores in vocacity
     backup storage
   """
 
