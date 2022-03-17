@@ -1,48 +1,34 @@
-# frozen_string_literal: true
+module VocacityGemTasks
+  class AppBackup
+    def initialize
+      logger.info "⚙️ starts backup (##{now})"
+    end
 
-require "decidim/vocacity_gem_tasks/admin"
-require "decidim/vocacity_gem_tasks/engine"
-require "decidim/vocacity_gem_tasks/admin_engine"
-
-require 'active_support/core_ext' 
-
-require "rails"
-
-module Decidim
-  # This namespace holds the logic of the `VocacityGemTasks` component. This component
-  # allows users to create vocacity_gem_tasks in a participatory space.
-  module VocacityGemTasks
-    class AppBackup
-      def initialize
-        logger.info "⚙️ starts backup (##{now})"
-        check_pgpass
-      end
-
-      ##
-      # Run a backup of : 
-      #   public/uploads
-      #   current database
-      # And store it in a .tar.gz file.
-      # @return [String] the absolute path of the backuped file
-      def run!
-        Dir.mktmpdir do |dir|
-          logger.debug "Prepare backup in tmp dir '#{dir}'"
-          dump_database(dir)
-          compress_uploads(dir)
-          generate_metadatas(dir)
-          with_backup_dir do |backup_dir|
-            backup_file = "#{backup_dir}/#{now}-backup.tar.gz"
-            compress_tar!("#{dir}/", backup_file)
-            backup_file
-          end
+    ##
+    # Run a backup of :
+    #   public/uploads
+    #   current database
+    # And store it in a .tar.gz file.
+    # @return [String] the absolute path of the backuped file
+    def run!
+      Dir.mktmpdir do |dir|
+        logger.debug "Prepare backup in tmp dir '#{dir}'"
+        dump_database(dir)
+        compress_uploads(dir)
+        generate_metadatas(dir)
+        with_backup_dir do |backup_dir|
+          backup_file = "#{backup_dir}/#{now}-backup.tar.gz"
+          compress_tar!("#{dir}/", backup_file)
+          backup_file
         end
       end
+    end
 
-      private
+    private
       ##
       # Generates a metadata.json file that will be included in the
       # given dir. Give information about date, instance identification,
-      # timezone and decidim version. 
+      # timezone and decidim version.
       # @returns [String] the filename of the generate file
       def generate_metadatas(dir)
         filename = "#{dir}/metadatas.json"
@@ -72,50 +58,53 @@ module Decidim
       end
 
       ##
-      # Dump the posgres database. 
+      # Dump the posgres database.
       def dump_database(destination_dir)
-        logger.debug "Running dump_database"
-        db_host = ENV.fetch("DATABASE_HOST")
-        db_user = ENV.fetch("DATABASE_USERNAME")
-        db_pass = ENV.fetch("DATABASE_PASSWORD")
-        db_name = ENV.fetch('DATABASE_DATABASE')
+        with_pg_pass do 
+          logger.debug "Running dump_database"
+          db_host = ENV.fetch("DATABASE_HOST")
+          db_user = ENV.fetch("DATABASE_USERNAME")
+          db_pass = ENV.fetch("DATABASE_PASSWORD")
+          db_name = ENV.fetch("DATABASE_DATABASE")
 
-        dump_file = "#{destination_dir}/#{db_name}-#{now}.dump"
-        exec_command!("pg_dump -Fc \
+          dump_file = "#{destination_dir}/#{db_name}-#{now}.dump"
+          exec_command!("pg_dump -Fc \
           -d #{db_name} -h #{db_host} -U #{db_user} -w \
           -f #{dump_file}")
 
-        logger.info "⚙️ backup db: #{dump_file}"
-        dump_file
-      rescue Exception => e
-        logger.error e.message
-        raise e
+          logger.info "⚙️ backup db: #{dump_file}"
+          dump_file
+        rescue Exception => e
+          logger.error e.message
+          raise e
+        end
       end
 
       ##
       # Create if not exists a .pgpass file.
       # Needed to be able to use pg_dump from this image.
-      def check_pgpass
+      def with_pg_pass(&block)
         # Check /root/.pgpass exists if not create it
-        File.open("/root/.pgpass", "w") do |f| 
+        File.open("/root/.pgpass", "w") do |f|
           db_host = ENV.fetch("DATABASE_HOST")
           db_user = ENV.fetch("DATABASE_USERNAME")
           db_pass = ENV.fetch("DATABASE_PASSWORD")
-          db_name = ENV.fetch('DATABASE_DATABASE')
+          db_name = ENV.fetch("DATABASE_DATABASE")
           f.write("#{db_host}:*:#{db_name}:#{db_user}:#{db_pass}")
           f.chmod(0600)
         end unless File.exists?("/root/.pgpass")
+        block.call()
       end
 
       ##
-      # exec a system command. 
+      # exec a system command.
       def exec_command!(command)
         logger.debug "exec '#{command}'"
         command_output = system(command)
         if command_output == true
           logger.debug "exec worked: #{command}"
         else
-            raise "exec failed: #{command}"
+          raise "exec failed: #{command}"
         end
       rescue Exception => e
         logger.error e.message
@@ -124,7 +113,7 @@ module Decidim
 
       ##
       # Ensure backup directory exists and then run the given block with
-      # backup directory path as argument. 
+      # backup directory path as argument.
       def with_backup_dir(&block)
         # @backup_dir ||= "#{Rails.root}/decidim-module-vocacity_gem_tasks/backup_dir"
         @backup_dir ||= "#{ENV.fetch('RAILS_ROOT')}/decidim-module-vocacity_gem_tasks/backup_dir"
@@ -151,8 +140,8 @@ module Decidim
       ##
       # Define logger for the class.
       def logger
-        # @logger ||= Rails.logger
-        @logger ||= Logger.new($stdout)
+        @logger ||= Rails.logger
+        # @logger ||= ::Logger.new($stdout)
       end
 
       ##
@@ -167,31 +156,5 @@ module Decidim
         # @uploads_path ||= "#{Rails.root}/public/uploads"
         @uploads_path ||= "#{ENV.fetch('RAILS_ROOT')}/public/uploads"
       end
-    end
-
-    class AppPeriodicalSave
-      
-      def initialize
-        logger.info "⚙️ starts send to S3 (##{now})"
-      end
-
-      def end_of_month
-        @end_of_month ||= DateTime.end_of_month 
-      end
-
-      def end_of_year
-        @end_of_year ||= DateTime.end_of_year 
-      end
-    end
-    
-    class AppSendToS3
-      def initialize
-        logger.info "⚙️ starts send to S3"
-      end
-
-      def check_backup_file
-      end
-    
-    end
   end
 end

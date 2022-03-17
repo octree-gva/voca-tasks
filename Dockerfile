@@ -25,9 +25,6 @@ COPY . $RAILS_ROOT/decidim-module-vocacity_gem_tasks
 RUN echo " " >> Gemfile && echo "  gem \"decidim-vocacity_gem_tasks\", path: \"./decidim-module-vocacity_gem_tasks\"" >> Gemfile
 
 # Install dependancies
-RUN bundle config set with 'development' && bundle install
-
-# Init Rspec inside image
-RUN bundle exec rspec --init
-
+RUN bundle clean --force && bundle config set with 'development test production' && bundle install
+RUN cat Gemfile
 CMD ["bundle", "exec", "sidekiq"]
