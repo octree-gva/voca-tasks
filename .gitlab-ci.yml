@@ -29,7 +29,7 @@ stages:
       - vendor/ruby
   before_script:
     - gem install bundler -v 2.3.6
-    - bundle config set path 'vendor/ruby'  
+    - bundle config set path 'vendor'  
     - RAILS_ENV=development bundle install -j $(nproc)
   script:
     - RAILS_ENV=test bundle exec rspec spec -f d
