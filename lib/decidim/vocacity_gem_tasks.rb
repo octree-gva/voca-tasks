@@ -9,14 +9,14 @@ require_relative "vocacity_gem_tasks/backup/app_backup"
 require_relative "vocacity_gem_tasks/backup/app_periodical_slave"
 require_relative "vocacity_gem_tasks/backup/app_send_to_s3"
 
-require 'active_support/core_ext' 
+require "active_support/core_ext"
 module Decidim
   module VocacityGemTasks
     class Error < StandardError; end
   end
 end
 
-require 'active_support/core_ext' 
+require "active_support/core_ext"
 
 require "rails"
 
