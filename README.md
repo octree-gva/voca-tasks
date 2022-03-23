@@ -23,7 +23,7 @@ bundle install
 ## Tasks
 
 * **`rails vocacity:backup`** execute a backup of your db and public/uploads folder
-* **`rails vocacity:webhook payload="<JSON_STRING>" name="<EVENT_NAME>" now="false"`**
+* **`rails vocacity:webhook payload="<JSON_STRING>" name="<EVENT_NAME>" now="false"`** call the strapi with a payload
     * `payload`
         > a JSON string to send to the vocacity service
     * `name`
@@ -31,6 +31,13 @@ bundle install
     * `now` 
         > _(optional)_ if the webhook should be send now instead of enqueued. 
         > Default: `false`
+* **`rails vocacity:command name="<COMMAND_NAME>" vars="<JSON INPUTS>"`** enqueue an active job to execute a rake task
+    * `name`
+        > the name of vocacity:* command.
+        > Default: `backup`
+    * `vars`
+        > JSON string of the args to pass.
+        > Example: "{\"foo\": \"bar\", \"now\": \"true\"}" will pass `foo="bar" now="true"` to the command
 
 
 

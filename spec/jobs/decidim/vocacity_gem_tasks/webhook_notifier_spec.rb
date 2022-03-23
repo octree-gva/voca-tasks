@@ -1,6 +1,8 @@
 
 module Decidim::VocacityGemTasks
   describe WebhookNotifierJob do
+    subject { described_class }
+
     let(:net_stub) do
       class NetStub; end
       net_stub = NetStub.new
@@ -15,7 +17,6 @@ module Decidim::VocacityGemTasks
       allow(http_net).to receive(:new).and_return(net_stub)
     end
 
-    subject { described_class }
 
     it "should send a request to <WEBHOOK_URL>/<INSTANCE_UUID>" do
       expect(Net::HTTP).to receive(:new).with("webhook_url", 80)

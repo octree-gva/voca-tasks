@@ -26,4 +26,11 @@ namespace :vocacity do
       Decidim::VocacityGemTasks::WebhookNotifierJob.perform_later(payload, name)
     end
   end
+
+  desc "Execute a command "
+  task command: :environment do
+    vars = JSON[ENV.fetch("vars", "{}")]
+    name = ENV.fetch("name", "backup").strip
+    Decidim::VocacityGemTasks::CommandJob.perform_now(name, vars)
+  end
 end

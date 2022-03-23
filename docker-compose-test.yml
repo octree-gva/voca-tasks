@@ -1,6 +1,6 @@
 services:
   local_postgres:
-    image: postgres:14
+    image: postgres:12
     volumes:
       - pg-data-test:/var/lib/postgresql/data
     environment:
