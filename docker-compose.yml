@@ -5,7 +5,7 @@ services:
       - DATABASE_HOST=pg
       - SECRET_KEY_BASE=DEV-CuF9oeNaep5deic2thiNg7cee8bae9Cho2eSoNaegh2sae4Pohmiu5roh2aingohpheeleeYei4eoTae2eileichil6ahtaiZaG7weexah8Das9risheiYai3TeeGoY3
       - DATABASE_USERNAME=decidim
-      - DATABASE_PASSWORD=DEV-baeGhi4Ohtahcee5eejoaxaiwaezaiGo
+      - DATABASE_PASSWORD=DEV-poh7aixeiChi
       - DATABASE_DATABASE=decidim_dev
       - RAILS_ENV=development
       - RACK_ENV=development
@@ -19,7 +19,6 @@ services:
       - ./lib:/home/decidim/app/decidim-vocacity_gem_tasks/lib
       - ./app:/home/decidim/app/decidim-vocacity_gem_tasks/app
       - ./spec:/home/decidim/app/decidim-vocacity_gem_tasks/spec
-
     ports:
       - 3000:3000
     depends_on:
@@ -36,11 +35,11 @@ services:
   redis:
     image: redis:latest
   pg:
-    image: postgres:12
+    image: postgres:14
     volumes:
       - pg-data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_PASSWORD=DEV-baeGhi4Ohtahcee5eejoaxaiwaezaiGo
+      - POSTGRES_PASSWORD=DEV-poh7aixeiChi
       - POSTGRES_USER=decidim
       - POSTGRES_DB=decidim_dev
     networks:
