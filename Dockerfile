@@ -7,7 +7,10 @@ LABEL license="AGPL-3.0"
 
 ENV DECIDIM_PROCESS="sidekiq" \
     RAILS_JOB_MODE="sidekiq"\
-    JOB_REDIS_URL="redis://redis:6379/1"
+    JOB_REDIS_URL="redis://redis:6379/1"\
+    WEBHOOK_URL=""\
+    WEBHOOK_HMAC=""\
+    INSTANCE_UUID=""
 
 # Set work directory
 WORKDIR /home/decidim/app

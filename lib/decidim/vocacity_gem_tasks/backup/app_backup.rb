@@ -1,3 +1,4 @@
+module Decidim
 module VocacityGemTasks
   class AppBackup
     def initialize
@@ -157,4 +158,5 @@ module VocacityGemTasks
         @uploads_path ||= "#{ENV.fetch('RAILS_ROOT')}/public/uploads"
       end
   end
+end
 end
