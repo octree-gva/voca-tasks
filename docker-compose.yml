@@ -35,7 +35,7 @@ services:
   redis:
     image: redis:latest
   pg:
-    image: postgres:12
+    image: postgres:14
     volumes:
       - pg-data:/var/lib/postgresql/data
     environment:
