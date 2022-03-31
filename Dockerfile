@@ -27,6 +27,12 @@ COPY . $RAILS_ROOT/decidim-module-vocacity_gem_tasks
 # Add this directory as gem's path to the gemfile
 RUN echo " " >> Gemfile && echo "  gem \"decidim-vocacity_gem_tasks\", path: \"./decidim-module-vocacity_gem_tasks\"" >> Gemfile
 
+# Workaround to make gem aws-sdk-s3 work inside app container
+RUN echo " " >> Gemfile && echo "gem \"aws-sdk-s3\", \"~> 1\"" >> Gemfile
+RUN bundle install
+
+RUN cat Gemfile
+
 # Install dependancies
 RUN bundle clean --force && bundle config set with 'development test production' && bundle install
 RUN cat Gemfile

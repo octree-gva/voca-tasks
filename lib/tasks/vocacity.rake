@@ -11,8 +11,12 @@ namespace :vocacity do
   task backup: :environment do
     backup_runner = Decidim::VocacityGemTasks::AppBackup.new
     backup_file = backup_runner.run!
-
-    Rails.logger.info "⚙️ vocacity:backup done. (#{backup_file})"
+    backup_uploader = Decidim::VocacityGemTasks::AppSendToS3.new(backup_file: backup_file)
+    if backup_uploader.run_sender?
+      Rails.logger.info "⚙️ vocacity:backup done. (#{backup_file})"
+    else
+      Rails.logger.error "⚙️ vocacity:backup fail. (#{backup_file})"
+    end
   end
 
   desc "Send webhook"
