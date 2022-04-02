@@ -11,8 +11,8 @@ namespace :vocacity do
   task backup: :environment do
     backup_runner = Decidim::VocacityGemTasks::AppBackup.new
     backup_file = backup_runner.run!
-    backup_uploader = Decidim::VocacityGemTasks::AppSendToS3.new(backup_file: backup_file)
-    if backup_uploader.run_sender?
+    backup_uploader = Decidim::VocacityGemTasks::AppUploadToS3.new(backup_file: backup_file)
+    if backup_uploader.run_uploader?
       Rails.logger.info "⚙️ vocacity:backup done. (#{backup_file})"
     else
       Rails.logger.error "⚙️ vocacity:backup fail. (#{backup_file})"

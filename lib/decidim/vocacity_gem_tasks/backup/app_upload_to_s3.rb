@@ -2,15 +2,15 @@ require 'aws-sdk-s3'
 
 module Decidim
   module VocacityGemTasks
-    class AppSendToS3
+    class AppUploadToS3
       def initialize(backup_file:)
-        logger.info "⚙️ starts send to S3"
+        logger.info "⚙️ starts upload backup_file to S3"
         raise ArgumentError, "backup_file cannot be nil" if backup_file.nil?
         @backup_file_path = backup_file
         @backup_file_name = File.basename(@backup_file_path)
       end
 
-      def run_sender?
+      def run_uploader?
         client_uuid = ENV.fetch('INSTANCE_UUID')
         logger.info "Uploading backup file: #{@backup_file_name} for client: #{client_uuid}"
         s3_bucket = get_vocacity_bucket
