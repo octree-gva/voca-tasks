@@ -4,15 +4,19 @@ require "decidim/vocacity_gem_tasks"
 
 def task_succeeded(task, metadata = {})
   metadata[:ok] = true
+  
   metadata[:time] = DateTime.now.strftime("%Q")
   Decidim::VocacityGemTasks::WebhookNotifierJob.perform_later(metadata, "decidim.#{task}")
+  puts "task succeed"
 end
 
 def task_failed(task, error, metadata = {})
   metadata[:ok] = false
   metadata[:message] = "#{error}"
   metadata[:time] = DateTime.now.strftime("%Q")
+  puts "task failed", "#{error}"
   Decidim::VocacityGemTasks::WebhookNotifierJob.perform_later(metadata, "decidim.#{task}")
+  puts "task failed", "#{error}"
 end
 
 namespace :vocacity do
