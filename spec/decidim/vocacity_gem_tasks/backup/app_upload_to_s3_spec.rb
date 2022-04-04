@@ -2,8 +2,6 @@
 
 require "spec_helper"
 
-require 'aws-sdk-s3'
-
 describe "VocacityGemTasks::AppUploadToS3" do
 
   let(:backup_file_path) { "/path_to_backup_dir/backup.tar.gz" }
