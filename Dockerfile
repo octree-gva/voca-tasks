@@ -24,11 +24,6 @@ RUN mkdir $RAILS_ROOT/public/uploads
 # Copy gem content in a local directory
 COPY . $RAILS_ROOT/decidim-module-vocacity_gem_tasks
 
-# Add this directory as gem's path to the gemfile
-RUN echo " " >> Gemfile && echo "  gem \"decidim-vocacity_gem_tasks\", path: \"./decidim-module-vocacity_gem_tasks\"" >> Gemfile
-
-RUN cat Gemfile
-
 # Install dependancies
 RUN bundle clean --force && bundle config set with 'development test production' && bundle install
 RUN cat Gemfile
