@@ -71,7 +71,7 @@ namespace :vocacity do
       "default_locale": ENV.fetch("default_locale"),
       "available_locales": ENV.fetch("available_locales")
     }
-    Decidim::VocacityGemTasks::Seed.seed!
+    Decidim::VocacityGemTasks::Seed.seed! seed_data
     task_succeeded("seed", { data: seed_data })
     rescue Exception => e
       task_failed("seed", e)
