@@ -20,11 +20,13 @@ describe "VocacityGemTasks::AppBackup" do
       runner = Decidim::VocacityGemTasks::AppBackup.new
       expect(runner).to receive(:dump_database).with("my-dirname")
       expect(runner).to receive(:compress_uploads).with("my-dirname")
+      expect(runner).to receive(:compress_logs).with("my-dirname")
       expect(runner).to receive(:generate_metadatas).with("my-dirname")
 
       stub_const("Dir", DirStub)
       allow(runner).to receive(:dump_database).and_return(nil)
       allow(runner).to receive(:compress_uploads).and_return(nil)
+      allow(runner).to receive(:compress_logs).and_return(nil)
       allow(runner).to receive(:generate_metadatas).and_return(nil)
       allow(runner).to receive(:with_backup_dir).and_return(nil)
       runner.run!
