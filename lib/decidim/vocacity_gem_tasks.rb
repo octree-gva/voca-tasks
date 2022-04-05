@@ -7,6 +7,7 @@ require_relative "vocacity_gem_tasks/version"
 
 require_relative "vocacity_gem_tasks/backup/app_backup"
 require_relative "vocacity_gem_tasks/backup/app_upload_to_s3"
+require_relative "vocacity_gem_tasks/seed"
 
 require "active_support/core_ext"
 module Decidim

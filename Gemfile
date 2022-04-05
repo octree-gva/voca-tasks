@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 source "https://rubygems.org"
 
 base_path = ""
@@ -16,13 +17,14 @@ gem "uglifier", "~> 4.1"
 gem "aws-sdk-s3", "~> 1"
 
 group :development, :test do
-  gem "byebug", "~> 11.0", platform: :mri
-  gem "dalli", "~> 2.7", ">= 2.7.10" # For testing MemCacheStore
-  gem "decidim-consultations", DECIDIM_VERSION
-  gem "decidim-dev", DECIDIM_VERSION
-  gem "rubocop"
-  gem "rubocop-faker"
-  gem "rubocop-performance", "~> 1.6.0"
+    gem "byebug", "~> 11.0", platform: :mri
+    gem "dalli", "~> 2.7", ">= 2.7.10" # For testing MemCacheStore
+    gem "decidim-consultations", DECIDIM_VERSION
+    gem "decidim-dev", DECIDIM_VERSION
+    gem "rubocop"
+    gem "rubocop-faker"
+    gem "rubocop-performance", "~> 1.6.0"
+    gem "database_cleaner-active_record"
 end
 
 group :development do
