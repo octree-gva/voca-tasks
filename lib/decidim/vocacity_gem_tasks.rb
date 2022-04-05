@@ -6,7 +6,6 @@ require_relative "vocacity_gem_tasks/admin_engine"
 require_relative "vocacity_gem_tasks/version"
 
 require_relative "vocacity_gem_tasks/backup/app_backup"
-require_relative "vocacity_gem_tasks/backup/app_periodical_save"
 require_relative "vocacity_gem_tasks/backup/app_upload_to_s3"
 
 require "active_support/core_ext"
