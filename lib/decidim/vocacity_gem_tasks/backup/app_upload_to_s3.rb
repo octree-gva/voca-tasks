@@ -50,7 +50,7 @@ module Decidim
 
         def upload_backup_file?(s3_bucket:, client_uuid:, backup_file_name:)
           target_obj = s3_bucket.object("#{client_uuid}/#{backup_file_name}")
-          upload_result = target_obj.upload_file("#{backup_file_name}")
+          upload_result = target_obj.upload_file(@backup_file_path)
           raise Error, "Backup upload failed for #{backup_file_name}" unless upload_result
           upload_result
         end    
