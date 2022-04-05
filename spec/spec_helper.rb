@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
+ENV["RAILS_ENV"] = "test"
 require "decidim/dev"
+require "database_cleaner/active_record"
+
+DatabaseCleaner.strategy = :truncation
 
 require "simplecov"
 SimpleCov.start "rails"
@@ -8,7 +12,6 @@ if ENV["CODECOV"]
   require "codecov"
   SimpleCov.formatter = SimpleCov::Formatter::Codecov
 end
-
 ENV["ENGINE_ROOT"] = File.dirname(__dir__)
 
 Decidim::Dev.dummy_app_path =
@@ -23,6 +26,8 @@ RSpec.configure do |config|
     ENV["WEBHOOK_URL"] = "http://webhook_url"
     ENV["INSTANCE_UUID"] = "instance_uuid"
     ENV["RAILS_ROOT"] = "root"
+    ENV["DECIDIM_DEFAULT_SYSTEM_EMAIL"] = "decidim_default_system@email.com"
+    ENV["DECIDIM_DEFAULT_SYSTEM_PASSWORD"] = "decidim_default_system_password"
     # Reset the locales to Decidim defaults before each test.
     # Some tests may change this which is why this is important.
     I18n.available_locales = [:en, :ca, :es]
