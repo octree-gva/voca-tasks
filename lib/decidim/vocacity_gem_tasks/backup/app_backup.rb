@@ -17,7 +17,8 @@ module Decidim
         Dir.mktmpdir do |dir|
           logger.debug "Prepare backup in tmp dir '#{dir}'"
           dump_database(dir)
-          compress_uploads(dir)
+          compress_source_path(uploads_path, dir)
+          compress_source_path(logs_path, dir)
           generate_metadatas(dir)
           with_backup_dir do |backup_dir|
             backup_file = "#{backup_dir}/#{now}-backup.tar.gz"
@@ -48,12 +49,13 @@ module Decidim
         end
 
         ##
-        # Compress the uploads directory in a tar.gz file.
-        def compress_uploads(destination_dir)
-          logger.debug "Running compress_uploads"
-          compressed_file = "#{destination_dir}/uploads-#{now}.tar.gz"
-          compress_tar!("#{uploads_path}/", "#{compressed_file}")
-          logger.info "⚙️ backup uploads: #{compressed_file}"
+        # Compress a directory in a tar.gz file.
+        def compress_source_path(source_path, destination_dir)
+          logger.debug "Running compress_dir for #{source_path}"
+          source_path_name = File.basename(source_path)
+          compressed_file = "#{destination_dir}/#{source_path_name}-#{now}.tar.gz"
+          compress_tar!("#{source_path}/", "#{compressed_file}")
+          logger.info "⚙️ backup #{source_path_name}: #{compressed_file}"
           compressed_file
         rescue Exception => e
           logger.error e.message
@@ -118,7 +120,6 @@ module Decidim
         # Ensure backup directory exists and then run the given block with
         # backup directory path as argument.
         def with_backup_dir(&block)
-          # @backup_dir ||= "#{Rails.root}/decidim-module-vocacity_gem_tasks/backup_dir"
           @backup_dir ||= "#{ENV.fetch('RAILS_ROOT')}/decidim-module-vocacity_gem_tasks/backup_dir"
           backup_dir = @backup_dir
           Dir.mkdir(backup_dir) unless Dir.exists?(backup_dir)
@@ -144,7 +145,6 @@ module Decidim
         # Define logger for the class.
         def logger
           @logger ||= Rails.logger
-          # @logger ||= ::Logger.new($stdout)
         end
 
         ##
@@ -156,8 +156,13 @@ module Decidim
         ##
         # Directory where the user's uploads are.
         def uploads_path
-          # @uploads_path ||= "#{Rails.root}/public/uploads"
           @uploads_path ||= "#{ENV.fetch('RAILS_ROOT')}/public/uploads"
+        end
+
+        ##
+        # Directory where the app's logs are.
+        def logs_path
+          @logs_path ||= "#{ENV.fetch('RAILS_ROOT')}/log"
         end
     end
   end
