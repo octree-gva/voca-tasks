@@ -19,17 +19,17 @@ WORKDIR /home/decidim/app
 ENV RAILS_ROOT "/home/decidim/app"
 
 # create $RAILS_ROOT/public/uploads
-RUN mkdir $RAILS_ROOT/public/uploads
-
+RUN mkdir -p $RAILS_ROOT/public/uploads && echo "DECIDIM_VERSION=$DECIDIM_VERSION"
 # Copy gem content in a local directory
 COPY . $RAILS_ROOT/decidim-module-vocacity_gem_tasks
+# Copy necessary dependancies for sidekiq images.
+COPY .docker/Gemfile-$DECIDIM_VERSION $RAILS_ROOT/tmp/Gemfile
 
-# Add this directory as gem's path to the gemfile
-RUN echo " " >> Gemfile && echo "  gem \"decidim-vocacity_gem_tasks\", path: \"./decidim-module-vocacity_gem_tasks\"" >> Gemfile
+# Add dependancies for gemfile and install
+RUN cat $RAILS_ROOT/tmp/Gemfile >> Gemfile && \
+    bundle config set with 'development test production' && \
+    cat Gemfile && \
+    bundle update
+    
 
-RUN cat Gemfile
-
-# Install dependancies
-RUN bundle clean --force && bundle config set with 'development test production' && bundle install
-RUN cat Gemfile
 CMD ["bundle", "exec", "sidekiq"]

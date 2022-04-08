@@ -17,11 +17,12 @@ Gem::Specification.new do |s|
   s.description = "vocacity_gem_tasks."
 
   s.files = Dir["{app,config,lib}/**/*", "LICENSE-AGPLv3.txt", "Rakefile", "README.md"]
-  s.executables = ["vocacity"]
   s.require_paths = ["lib"]
   s.add_dependency "decidim", Decidim::VocacityGemTasks.version
+  s.add_dependency "aws-sdk-s3", "~> 1"
   s.add_dependency "rails"
   s.add_development_dependency "rspec"
+  s.add_development_dependency "rspec_junit_formatter"
   s.add_development_dependency "decidim-dev", Decidim::VocacityGemTasks.version
   s.add_development_dependency "decidim-consultations", Decidim::VocacityGemTasks.version
   s.add_development_dependency "decidim-participatory_processes", Decidim::VocacityGemTasks.version

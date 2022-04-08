@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     decidim-vocacity_gem_tasks (0.24.3)
+      aws-sdk-s3 (~> 1)
       decidim (= 0.24.3)
       rails
 
