@@ -6,7 +6,7 @@ def task_succeeded(task, metadata = {})
   metadata[:ok] = true
   
   metadata[:time] = DateTime.now.strftime("%Q")
-  Decidim::VocacityGemTasks::WebhookNotifierJob.perform_later(metadata, "decidim.#{task}")
+  Decidim::VocacityGemTasks::WebhookNotifierJob.perform_now(metadata, "decidim.#{task}")
   puts "task succeed"
 end
 
@@ -15,7 +15,7 @@ def task_failed(task, error, metadata = {})
   metadata[:message] = "#{error}"
   metadata[:time] = DateTime.now.strftime("%Q")
   puts "task failed", "#{error}"
-  Decidim::VocacityGemTasks::WebhookNotifierJob.perform_later(metadata, "decidim.#{task}")
+  Decidim::VocacityGemTasks::WebhookNotifierJob.perform_now(metadata, "decidim.#{task}")
   puts "task failed", "#{error}"
 end
 

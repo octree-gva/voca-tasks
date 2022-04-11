@@ -3,9 +3,19 @@ require "spec_helper"
 module Decidim::VocacityGemTasks
   describe Seed do
     subject { described_class }
+    let(:net_stub) do
+      class NetStub; end
+      net_stub = NetStub.new
+      allow(net_stub).to receive(:post)
+      net_stub
+    end
+
     before(:each) do
+      http_net = class_double("Net::HTTP").as_stubbed_const()
+      allow(http_net).to receive(:new).and_return(net_stub)
       DatabaseCleaner.clean
     end
+    
     let(:valid_options) do
       {
           "system_admin_email": "system_admin_email@example.com",
@@ -61,7 +71,7 @@ module Decidim::VocacityGemTasks
       end
 
       it "send a webhook to the main service with credentials" do
-        expect(Decidim::VocacityGemTasks::WebhookNotifierJob).to receive(:perform_later).with(
+        expect(Decidim::VocacityGemTasks::WebhookNotifierJob).to receive(:perform_now).with(
           {
             id: 1,
             email: "admin@example.com",
