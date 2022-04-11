@@ -42,7 +42,11 @@ module Decidim
           end
 
           def notify!
-            header = { "Content-Type": "text/json" }
+            header = { 
+              "Content-Type": "application/json", 
+              "Accept": "application/json" ,
+              "User-Agent": "VocaCity/0.0.1"
+            }
             http = Net::HTTP.new(webhook_uri.host, webhook_uri.port)
             response = http.post(webhook_uri.request_uri, payload.to_json, header)
           end
