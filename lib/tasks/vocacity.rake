@@ -77,4 +77,43 @@ namespace :vocacity do
     rescue Exception => e
       task_failed("seed", e)
   end
+
+  desc "Update host,secondary_host,name,prefix"
+  task seed: :update:naming do
+    naming_data = {
+      "host": ENV.fetch("host"),
+      "secondary_host": ENV.fetch("secondary_host"),
+      "name": ENV.fetch("name"),
+      "reference_prefix": ENV.fetch("reference_prefix"),
+    }
+    Decidim::VocacityGemTasks::SystemUpdater.new.naming(naming_data)
+    task_succeeded("naming_updated", { data: naming_data })
+    rescue Exception => e
+      task_failed("naming_updated", e)
+  end
+  
+  desc "Update default,available locales"
+  task seed: :update:locales do
+    locales_data = {
+      "default": ENV.fetch("default"),
+      "available": ENV.fetch("available", "").split(",").map(&:to_sym),
+    }
+    Decidim::VocacityGemTasks::SystemUpdater.new.locales(locales_data)
+    task_succeeded("locale_updated", { data: locales_data })
+    rescue Exception => e
+      task_failed("locale_updated", e)
+  end
+
+  desc "Update feature toggles"
+  task seed: :update:features do
+    feature_data = {
+      "registration_mode": ENV.fetch("registration_mode"),
+      "badges": ENV.fetch("badges", nil),
+      "user_groups": ENV.fetch("user_groups", nil),
+    }
+    Decidim::VocacityGemTasks::SystemUpdater.new.features(feature_data)
+    task_succeeded("features_updated", { data: feature_data })
+    rescue Exception => e
+      task_failed("features_updated", e)
+  end
 end

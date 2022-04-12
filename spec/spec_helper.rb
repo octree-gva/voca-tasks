@@ -18,9 +18,11 @@ Decidim::Dev.dummy_app_path =
   File.expand_path(File.join(__dir__, "dummy"))
 
 require "decidim/dev/test/base_spec_helper"
-
 RSpec.configure do |config|
-
+  config.include FactoryBot::Syntax::Methods
+  config.before(:suite) do
+    FactoryBot.find_definitions
+  end
   config.before do
     ENV["WEBHOOK_HMAC"] = "webhook_hmac"
     ENV["WEBHOOK_URL"] = "http://webhook_url"

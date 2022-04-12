@@ -34,5 +34,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency "puma"
   s.add_development_dependency "uglifier"
   s.add_development_dependency "codecov"
+  s.add_development_dependency "factory_bot"
 
 end
