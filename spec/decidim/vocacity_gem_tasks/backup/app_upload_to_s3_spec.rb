@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-describe "VocacityGemTasks::AppUploadToS3" do
+describe "VocacityGemTasks::App" do
 
   let(:backup_file_path) { "/path_to_backup_dir/backup.tar.gz" }
   let(:s3) { Aws::S3::Resource.new(stub_responses: true) }
@@ -29,3 +29,4 @@ describe "VocacityGemTasks::AppUploadToS3" do
   end
 
 end
+

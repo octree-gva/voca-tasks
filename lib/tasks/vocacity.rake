@@ -27,13 +27,16 @@ namespace :vocacity do
   """
 
   desc "Backup Decidim Resources"
-  task backup: :environment do
+  task backup: :environment do 
     backup_runner = Decidim::VocacityGemTasks::AppBackup.new
     backup_file = backup_runner.run!
-    backup_uploader = Decidim::VocacityGemTasks::AppUploadToS3.new(backup_file: backup_file)
-    raise Error, "⚙️ vocacity:backup fail. (#{backup_file})" unless backup_uploader.run_uploader?
-    Rails.logger.info "⚙️ vocacity:backup done. (#{backup_file})"
-    task_succeeded("backup", { file: backup_file })
+    backup_file_encrypter = Decidim::VocacityGemTasks::AppEncryptBackupFile.new(backup_file)
+    backup_file_encrypter.encrypt!
+    backup_file_encrypted = backup_file_encrypter.file_enc
+    backup_uploader = Decidim::VocacityGemTasks::AppUploadToS3.new(backup_file_encrypted)
+    raise Error, "⚙️ vocacity:backup fail. (#{backup_file_encrypted})" unless backup_uploader.run_uploader?
+    Rails.logger.info "⚙️ vocacity:backup done. (#{backup_file_encrypted})"
+    task_succeeded("backup", { file: backup_file_encrypted })
   rescue Exception => e
     task_failed("backup", e)
   end
