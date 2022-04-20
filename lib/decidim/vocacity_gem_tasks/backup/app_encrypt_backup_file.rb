@@ -14,7 +14,7 @@ module Decidim
       end
     
       def encrypt!
-        cipher!
+        setup_cipher!
         @file_enc = @file_path+".enc"
         File.open(@file_enc, "w:BINARY") do |encrypted_file|     
           File.open(@file_path, "r:BINARY") do |file|
@@ -30,7 +30,7 @@ module Decidim
       end
 
       private
-        def cipher!
+        def setup_cipher!
           @cipher ||= OpenSSL::Cipher::AES.new(256, :CBC).encrypt
           @cipher.key = Base64.decode64(ENV.fetch("BACKUP_CIPHER_KEY"))
           @cipher.iv = Base64.decode64(ENV.fetch("BACKUP_CIPHER_IV"))
