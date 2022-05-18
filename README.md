@@ -1,11 +1,27 @@
+[![coverage](https://git.octree.ch/decidim/vocacity/tasks/badges/main/coverage.svg?job=coverage-024)](https://github.com/octree-gva/voca-tasks)
+
+[![release](https://git.octree.ch/decidim/vocacity/tasks/badges/main/release.svg)](https://github.com/octree-gva/voca-tasks)
+
+# Voca
+Create&Manage Decidim instances on-the-fly, deploy all its ecosystem. 
+Voca focuses on Decidim, released on [APGL-3 open-source license](LICENSE.md) and all the ecosystem around the platform. As *Decidim is not a tool, but a framework for digital democratic participation, many tools gravitates around Decidim.* 
+
+*Our ambition is to create with Voca **an open-source SaaS service from Decidim & its ecosystem.***
+
+## Repositories
+
+| repo        | info                                                                          | stable version |
+|-------------|-------------------------------------------------------------------------------|----------------|
+| [voca-system](https://github.com/octree-gva/voca-system) | Install and manage decidim instances through a Dashboard                      | v0.1.0         |
+| [voca-tasks](https://github.com/octree-gva/voca-tasks)  | Gem embedded in our Decidim image.  Manipulate and manage decidim instances.  | v0.1.0         |
+| [voca-jps](https://github.com/octree-gva/voca-jps)    | Jelastic Manifest to deploy Decidim images                                    | v0.1.0         |
+| [voca-docker](https://github.com/octree-gva/voca-docker) | Build Decidim docker images for Voca                                          | v0.1.0         |
+
+
 # Decidim::VocacityGemTasks
 
-vocacity_gem_tasks.
 
-## Usage
 
-VocacityGemTasks will be available as a Component for a Participatory
-Space.
 
 ## Installation
 
@@ -20,7 +36,7 @@ And then execute:
 ```sh
 bundle install
 ```
-## Tasks
+## Usage: Tasks
 
 * **`rails vocacity:backup`** execute a backup of your db and public/uploads folder
 * **`rails vocacity:webhook payload="<JSON_STRING>" name="<EVENT_NAME>" now="false"`** call the strapi with a payload
@@ -67,8 +83,8 @@ to run the unit tests.
 
 ## Contributing
 
-See [Decidim](https://github.com/decidim/decidim).
+See [Contributing](CONTRIBUTING.md).
 
 ## License
 
-This engine is distributed under the GNU AFFERO GENERAL PUBLIC LICENSE.
+See [License](LICENSE.md).

@@ -27,7 +27,7 @@ COPY .docker/Gemfile-$DECIDIM_VERSION $RAILS_ROOT/tmp/Gemfile
 
 # Add dependancies for gemfile and install
 RUN cat $RAILS_ROOT/tmp/Gemfile >> Gemfile && \
-    bundle config set with 'development test production' && \
+    bundle config set without '' && \
     cat Gemfile && \
     bundle update
     
