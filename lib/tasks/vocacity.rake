@@ -42,7 +42,12 @@ namespace :vocacity do
     task_failed("backup", e)
   end
 
-  desc "Send webhook"
+  desc """Send webhook
+  Send a webhook to the ENV['WEBHOOK_URL']
+
+  Example
+  rails vocacity:webhook payload='{\'precompiled\':true, \'msg\':\'assets precompiled\'}' name='decidim.assets_compiled' now='true'
+  """
   task webhook: :environment do
     payload = JSON[ENV.fetch("payload", "{}")]
     name = ENV.fetch("name", "decidim")
@@ -64,7 +69,23 @@ namespace :vocacity do
     task_failed("command", e)
   end
 
-  desc "Seed a minial instance"
+  desc """Update decidim host
+  Update the host with the given host argument
+
+  Example
+  rails vocacity:update:host host='test.ch'
+  """
+  task "update:host": :environment do
+    new_host = ENV.fetch("host", "")
+    raise "host not found" unless new_host.present?
+
+    Decidim::VocacityGemTasks::Updater.update! host: new_host
+    task_succeeded("update_host", { data: {host: new_host} })
+    rescue Exception => e
+      task_failed("update_host", e)
+  end
+
+  desc "Seed a minimal instance"
   task seed: :environment do
     seed_data = {
       "system_admin_email": ENV.fetch("system_admin_email"),
