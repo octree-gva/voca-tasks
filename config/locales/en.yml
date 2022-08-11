@@ -2,5 +2,5 @@
 en:
   decidim:
     components:
-      vocacity_gem_tasks:
-        name: VocacityGemTasks
+      voca:
+        name: Voca

@@ -1,51 +1,34 @@
 services:
-  app:
-    build: .
-    environment:
-      - DATABASE_HOST=pg
-      - SECRET_KEY_BASE=DEV-CuF9oeNaep5deic2thiNg7cee8bae9Cho2eSoNaegh2sae4Pohmiu5roh2aingohpheeleeYei4eoTae2eileichil6ahtaiZaG7weexah8Das9risheiYai3TeeGoY3
-      - DATABASE_USERNAME=decidim
-      - DATABASE_PASSWORD=DEV-poh7aixeiChi
-      - DATABASE_DATABASE=decidim_dev
-      - RAILS_ENV=development
-      - RACK_ENV=development
-      - PORT=3000
-      - RAILS_MAX_THREADS=1
-      - RAILS_SERVE_STATIC_FILES=true
-      - RAILS_LOG_TO_STDOUT=enabled
-      - RAILS_JOB_MODE=sidekiq
-      - JOB_REDIS_URL=redis://redis:6379/1
-    volumes:
-      - ./lib:/home/decidim/app/decidim-vocacity_gem_tasks/lib
-      - ./app:/home/decidim/app/decidim-vocacity_gem_tasks/app
-      - ./spec:/home/decidim/app/decidim-vocacity_gem_tasks/spec
-    ports:
-      - 3000:3000
-    depends_on:
-      - pg
-      - redis
-    links:
-      - pg
-      - redis
-    networks:
-      - private
-      - default
-    volumes:
-      - .:/home/decidim/app/decidim-module-vocacity_gem_tasks
-  redis:
-    image: redis:latest
   pg:
     image: postgres:12
     volumes:
       - pg-data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_PASSWORD=DEV-poh7aixeiChi
+      - POSTGRES_PASSWORD=TEST-baeGhi4Ohtahcee5eejoaxaiwaezaiGo
       - POSTGRES_USER=decidim
-      - POSTGRES_DB=decidim_dev
-    networks:
-      - private
+      - POSTGRES_DB=decidim_test
+    ports:
+      - 5432:5432
+
+  redis:
+    image: "redis:alpine"
+    command: redis-server --requirepass my_insecure_password
+    volumes:
+      - redis-data:/var/lib/redis
+      - redis-conf:/usr/local/etc/redis/redis.conf
+    environment:
+      - REDIS_REPLICATION_MODE=master
+    ports:
+      - 6379:6379
+
+  mailcatcher:
+    restart: on-failure:10
+    image: dockage/mailcatcher:0.7.1
+    ports:
+      - "1080:1080"
+      - "3587:1025"
+
 volumes:
   pg-data: {}
-networks:
-  private:
-    internal: true
+  redis-data:
+  redis-conf:

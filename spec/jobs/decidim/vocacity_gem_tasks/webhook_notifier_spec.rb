@@ -1,5 +1,6 @@
+# frozen_string_literal: true
 
-module Decidim::VocacityGemTasks
+module Decidim::Voca
   describe WebhookNotifierJob do
     subject { described_class }
 

@@ -7,7 +7,7 @@
 /spec/reports/
 /tmp/
 vendor
-
+.byebug_history
 
 # rspec failure tracking
 .rspec-failures

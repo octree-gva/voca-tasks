@@ -5,7 +5,7 @@
 # installed from the root of your application.
 
 ENGINE_ROOT = File.expand_path("..", __dir__)
-ENGINE_PATH = "#{ENGINE_ROOT}/lib/decidim/vocacity_gem_tasks/engine"
+ENGINE_PATH = "#{ENGINE_ROOT}/lib/decidim/voca/engine"
 
 # Set up gems listed in the Gemfile.
 

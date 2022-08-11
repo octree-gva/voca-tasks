@@ -4,7 +4,7 @@ require "decidim/dev/common_rake"
 
 def install_module(path)
   Dir.chdir(path) do
-    # system("bundle exec rake decidim_vocacity_gem_tasks:install:migrations")
+    # system("bundle exec rake decidim_voca:install:migrations")
   end
 end
 
@@ -19,8 +19,8 @@ task :prepare_tests do
   # Remove previous existing db, and recreate one.
   disable_docker_compose = ENV.fetch("DISABLED_DOCKER_COMPOSE", "false") == "true"
   unless disable_docker_compose
-    system("docker-compose -f docker-compose-test.yml down -v")
-    system("docker-compose -f docker-compose-test.yml up -d --remove-orphans")
+    system("docker-compose -f docker-compose.yml down -v")
+    system("docker-compose -f docker-compose.yml up -d --remove-orphans")
   end
   ENV["RAILS_ENV"] = "test"
   databaseYml = {
@@ -34,6 +34,7 @@ task :prepare_tests do
       "database" => "decidim_test"
     }
   }
+
   config_file = File.expand_path("spec/dummy/config/database.yml", __dir__)
   File.open(config_file, "w") { |f| YAML.dump(databaseYml, f) }
   Dir.chdir("spec/dummy") do
@@ -75,7 +76,10 @@ task :development_app do
       "--demo"
     )
   end
+end
 
-  install_module("development_app")
-  seed_db("development_app")
+desc "Update protos for voca"
+task :update_voca_proto do
+  %x(curl https://raw.githubusercontent.com/octree-gva/voca-protos/main/clients/decidim-ruby-client.tar.gz | tar -xz -C ./lib/decidim/voca/rpc)
+  puts "✅ /lib/decidim/voca/rpc udpated"
 end
