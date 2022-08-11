@@ -16,5 +16,7 @@ Gem::Specification.new do |s|
   s.description = "voca."
 
   s.files = Dir["{app,config,lib}/**/*", "LICENSE.md", "Rakefile", "README.md"]
+  s.add_dependency "aws-sdk-s3", "~> 1"
+  s.add_dependency "gruf", "~> 2.14", ">= 2.14.1"
 
 end
