@@ -5,6 +5,8 @@ include:
 
 services:
   - postgres:14
+  - redis:latest
+
 
 variables:
   POSTGRES_DB: decidim_test
@@ -17,22 +19,7 @@ stages:
   - version
   - build
 
-
-⚙️:build-024: 
-  stage: build
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "main"'
-    - if: "$CI_COMMIT_TAG =~ /v.*$/"
-  image:
-    name: gcr.io/kaniko-project/executor:debug
-    entrypoint: [""]
-  script:
-    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $CI_REGISTRY_IMAGE/decidim-tasks:${CI_COMMIT_TAG:-latest}
-    - echo "{\"auths\":{\"https://index.docker.io/v1/\":{\"auth\":\"$DOCKERHUB_AUTH\"}}}" > /kaniko/.docker/config.json
-    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination octree/voca-decidim-async:${CI_COMMIT_TAG:-latest}
-    
-coverage-024: 
+coverage-024:
   image: ruby:2.7.1
   stage: test
   only:
@@ -51,26 +38,15 @@ coverage-024:
       junit: rspec.xml
   variables:
     DATABASE_HOST: "postgres"
+    # trunk-ignore(gitleaks/generic-api-key)
     DATABASE_PASSWORD: "TEST-ohm5phaisohHie2ohh7aeweecahdoy5p"
     DATABASE_USERNAME: "decidim"
     DISABLED_DOCKER_COMPOSE: "true"
   before_script:
     - apt-get update -qq && apt-get install -y -qq nodejs
     - gem install bundler -v 2.3.6
-    - bundle config set path 'vendor'  
+    - bundle config set path 'vendor'
     - RAILS_ENV=development bundle install -j $(nproc)
     - bundle exec rake test_app
   script:
     - RAILS_ENV=test bundle exec rspec spec --format progress --format RspecJunitFormatter --exclude-pattern ./**/vendor/**/*_spec.rb --out rspec.xml
-
-
-build-024: 
-  stage: build
-  only:
-    - merge_requests
-  image:
-    name: gcr.io/kaniko-project/executor:debug
-    entrypoint: [""]
-  script:
-    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
-    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $CI_REGISTRY_IMAGE/decidim-tasks:testing

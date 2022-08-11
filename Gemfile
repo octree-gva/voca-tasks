@@ -2,40 +2,26 @@
 
 source "https://rubygems.org"
 
-base_path = ""
-base_path = "../../" if File.basename(__dir__) == "dummy"
-require_relative "#{base_path}lib/decidim/vocacity_gem_tasks/version"
+gem "decidim", "0.24.3"
+gem "decidim-voca", path: "."
 
-DECIDIM_VERSION = Decidim::VocacityGemTasks.version
-
-gem "decidim", DECIDIM_VERSION
-gem "decidim-vocacity_gem_tasks", path: "."
-gem "sqlite3"
-gem "bootsnap", "~> 1.4"
-gem "puma", ">= 5.0.0"
-gem "uglifier", "~> 4.1"
 gem "aws-sdk-s3", "~> 1"
+gem "gruf", "~> 2.14", ">= 2.14.1"
+gem "bootsnap"
 
 group :development, :test do
-    gem "byebug", "~> 11.0", platform: :mri
-    gem "dalli", "~> 2.7", ">= 2.7.10" # For testing MemCacheStore
-    gem "decidim-consultations", DECIDIM_VERSION
-    gem "decidim-dev", DECIDIM_VERSION
-    gem "rubocop"
-    gem "rubocop-faker"
-    gem "rubocop-performance", "~> 1.6.0"
-    gem "database_cleaner-active_record"
-end
-
-group :development do
   gem "faker", "~> 2.14"
-  gem "letter_opener_web", "~> 1.4", ">= 1.4.0"
+  gem "byebug", "~> 11.0", platform: :mri
+
+  gem "decidim-dev", "0.24.3"
   gem "listen", "~> 3.1"
   gem "spring", "~> 2.0"
+  gem 'spring-commands-rspec'
   gem "spring-watcher-listen", "~> 2.0"
-  gem "web-console", "~> 3.7", ">= 3.7.0"
 end
 
 group :test do
+  gem "database_cleaner-active_record"
   gem "codecov", require: false
+  gem 'gruf-rspec', require: false
 end

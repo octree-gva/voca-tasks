@@ -1,0 +1,5 @@
+{
+  "ruby.rubocop.suppressRubocopWarnings": true,
+  "ruby.rubocop.configFilePath": "/Users/hadrien.froger/.rubocop.yml",
+  "ruby.rubocop.executePath": "/Users/hadrien.froger/.rvm/gems/ruby-2.7.1/bin/"
+}
