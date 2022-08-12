@@ -19,7 +19,7 @@ module Decidim
 
           def cast_permission_settings(permission_settings)
             # Convert enums
-            casting = ::Decidim::Voca::EnumCasting.users_registration_mode
+            casting = ::Decidim::Voca::Rpc::EnumCasting.users_registration_mode
             permission_settings[:users_registration_mode] = casting.rpc_to_decidim(
               permission_settings[:users_registration_mode]
             )

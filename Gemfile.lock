@@ -2,6 +2,8 @@ PATH
   remote: .
   specs:
     decidim-voca (0.24.3)
+      aws-sdk-s3 (~> 1)
+      gruf (~> 2.14, >= 2.14.1)
 
 GEM
   remote: https://rubygems.org/

@@ -25,10 +25,10 @@ module Decidim
           def transform_settings(settings)
             from_label = settings.delete("from_label")
             from_email = settings.delete("from_email")
-            settings["openssl_verify_mode"] = Decidim::Voca::EnumCasting.smtp_openssl_verify_mode.rpc_to_decidim(
+            settings["openssl_verify_mode"] = Decidim::Voca::Rpc::EnumCasting.smtp_openssl_verify_mode.rpc_to_decidim(
               settings["openssl_verify_mode"]
             )
-            settings["authentication"] = Decidim::Voca::EnumCasting.smtp_authentication.rpc_to_decidim(
+            settings["authentication"] = Decidim::Voca::Rpc::EnumCasting.smtp_authentication.rpc_to_decidim(
               settings["authentication"]
             )
             if from_email.blank? && !from_label.blank?
