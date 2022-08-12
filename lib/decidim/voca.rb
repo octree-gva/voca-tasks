@@ -10,7 +10,6 @@ require_relative "voca/backup/app_backup"
 require_relative "voca/backup/app_upload_to_s3"
 require_relative "voca/backup/app_encrypt_backup_file"
 require_relative "voca/backup/app_decrypt_backup_file"
-require_relative "voca/seed"
 require_relative "voca/updater"
 require_relative "voca/rpc/decidim_services_pb"
 

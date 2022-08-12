@@ -84,22 +84,4 @@ namespace :voca do
     rescue Exception => e
       task_failed("update_host", e)
   end
-
-  desc "Seed a minimal instance"
-  task seed: :environment do
-    seed_data = {
-      "system_admin_email": ENV.fetch("system_admin_email"),
-      "system_admin_password": ENV.fetch("system_admin_password"),
-      "admin_email": ENV.fetch("admin_email"),
-      "org_name": ENV.fetch("org_name"),
-      "org_prefix": ENV.fetch("org_prefix"),
-      "host": ENV.fetch("host"),
-      "default_locale": ENV.fetch("default_locale"),
-      "available_locales": ENV.fetch("available_locales")
-    }
-    Decidim::Voca::Seed.seed! seed_data
-    task_succeeded("seed", { data: seed_data })
-    rescue Exception => e
-      task_failed("seed", e)
-  end
 end
