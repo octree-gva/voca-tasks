@@ -86,10 +86,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :default_locale, :string, 5
       optional :available_locales, :string, 6
       optional :system_email, :string, 7
-    end
-    add_message "voca_decidim.SeedResponse" do
-      optional :admin_password, :string, 2
-      optional :system_password, :string, 3
+      optional :system_password, :string, 8
     end
     add_message "voca_decidim.BackupCredentialsReq" do
       optional :cypherKey, :string, 1
@@ -128,7 +125,6 @@ module VocaDecidim
   DecidimOrganizationFileUploadSettings = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("voca_decidim.DecidimOrganizationFileUploadSettings").msgclass
   DecidimOrganizationFeatureFlagSettings = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("voca_decidim.DecidimOrganizationFeatureFlagSettings").msgclass
   SeedRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("voca_decidim.SeedRequest").msgclass
-  SeedResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("voca_decidim.SeedResponse").msgclass
   BackupCredentialsReq = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("voca_decidim.BackupCredentialsReq").msgclass
   SETTINGS_REGISTER_MODE_OPTION = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("voca_decidim.SETTINGS_REGISTER_MODE_OPTION").enummodule
   SETTINGS_SMTP_AUTHENTICATION_OPTION = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("voca_decidim.SETTINGS_SMTP_AUTHENTICATION_OPTION").enummodule

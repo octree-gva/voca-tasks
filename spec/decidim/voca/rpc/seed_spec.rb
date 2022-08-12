@@ -3,8 +3,15 @@
 require "spec_helper"
 
 module Decidim::Voca
-  describe Seed do
-    subject { described_class }
+describe Decidim::Voca::DecidimServiceController do
+    let(:empty) { ::Google::Protobuf::Empty.new }
+    def subject(options)
+      run_rpc(
+        :Seed,
+        ::VocaDecidim::SeedRequest.new(options)
+      )
+    end
+
     let(:net_stub) do
       class NetStub; end
       net_stub = NetStub.new
@@ -20,27 +27,27 @@ module Decidim::Voca
 
     let(:valid_options) do
       {
-          "system_admin_email": "system_admin_email@example.com",
-          "system_admin_password": "system_admin_password",
-          "admin_email": "admin@example.com",
-          "org_name": "org_name",
-          "org_prefix": "org_prefix",
-          "host": "host",
-          "default_locale": "en",
-          "available_locales": "en,es"
+          system_email: "system_admin_email@example.com",
+          system_password: "system_admin_password",
+          admin_email: "admin@example.com",
+          name: "org_name",
+          short_name: "org_prefix",
+          host: "host",
+          default_locale: "en",
+          available_locales: "en,es"
       }
     end
 
     it "creates a system administrator with given attributes system_admin_email, system_admin_password" do
       expect do
-        subject.seed!(valid_options)
+        subject(valid_options)
       end.to change { Decidim::System::Admin.count }.from(0).to(1)
       expect(Decidim::System::Admin.first.email).to eq "system_admin_email@example.com"
     end
 
     it "creates an organization with given attribute org_name, host, org_prefix" do
       expect do
-        subject.seed!(valid_options)
+        subject(valid_options)
       end.to change { Decidim::Organization.count }.from(0).to(1)
       expect(Decidim::Organization.first.host).to eq "host"
       expect(Decidim::Organization.first.name).to eq "org_name"
@@ -49,26 +56,26 @@ module Decidim::Voca
 
     it "defines basic content blocks" do
       expect do
-        subject.seed!(valid_options)
+        subject(valid_options)
       end.to change { Decidim::ContentBlock.count }.by_at_least(2)
     end
 
     it "creates a help page" do
       expect do
-        subject.seed!(valid_options)
+        subject(valid_options)
       end.to change { Decidim::StaticPage.where(slug: "help").count }.from(0).to(1)
     end
 
     it "creates a term and conditions page" do
       expect do
-        subject.seed!(valid_options)
+        subject(valid_options)
       end.to change { Decidim::StaticPage.where(slug: "terms-and-conditions").count }.by(1)
     end
 
     describe "admin creation:" do
       it "creates an admin" do
         expect do
-          subject.seed!(valid_options)
+          subject(valid_options)
         end.to change { Decidim::User.where(admin: true).count }.from(0).to(1)
       end
 
@@ -84,7 +91,7 @@ module Decidim::Voca
           },
           "decidim.admin_created"
         )
-        subject.seed!(valid_options)
+        subject(valid_options)
       end
     end
   end
