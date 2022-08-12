@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe Decidim::Voca::SetSettingsController do
+describe Decidim::Voca::DecidimServiceController do
   let(:empty) { ::Google::Protobuf::Empty.new }
   let(:organization) do
     create(

@@ -21,7 +21,7 @@ module Decidim
 
         private
           def with_enums(settings)
-            settings["machine_translation_display_priority"] = EnumCasting.machine_translation_display_priority.rpc_to_decidim(
+            settings["machine_translation_display_priority"] = Decidim::Voca::Rpc::EnumCasting.machine_translation_display_priority.rpc_to_decidim(
               settings["machine_translation_display_priority"]
             )
             settings

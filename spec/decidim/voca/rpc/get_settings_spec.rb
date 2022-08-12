@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe Decidim::Voca::GetSettingsController do
+describe Decidim::Voca::DecidimServiceController do
   let(:empty) { ::Google::Protobuf::Empty.new }
   context "edge cases" do
     it "raises not found error if no organization is present" do
@@ -115,7 +115,7 @@ describe Decidim::Voca::GetSettingsController do
         expect(file_upload.maximum_file_size_avatar).to eq(5.0)
       end
       it "override values" do
-        organization.update!(file_upload_settings: {maximum_file_size: { default: 20 }})
+        organization.update!(file_upload_settings: { maximum_file_size: { default: 20 } })
         expect(file_upload.maximum_file_size_default).to eq(20)
       end
     end
@@ -141,7 +141,7 @@ describe Decidim::Voca::GetSettingsController do
           expect do
             organization.update!(machine_translation_display_priority: "translated")
           end.to change { run_rpc(
-              :GetSettings,
+            :GetSettings,
               empty
             ).feature_settings.machine_translation_display_priority }.from(
               :SETTINGS_MACHINE_TRANSLATION_PRIORITY_ORIGINAL
