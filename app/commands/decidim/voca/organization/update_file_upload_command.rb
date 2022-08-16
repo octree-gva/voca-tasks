@@ -1,7 +1,7 @@
 module Decidim
   module Voca
     module Organization
-      class UpdateFileUploadCommand < UpdateOrganizationCommand
+      class UpdateFileUploadCommand < OrganizationCommand
         attr_reader :file_upload_settings
         def initialize(file_upload_settings)
           @file_upload_settings = with_defaults(

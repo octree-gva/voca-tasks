@@ -1,7 +1,7 @@
 module Decidim
   module Voca
     module Organization
-      class UpdateColorCommand < UpdateOrganizationCommand
+      class UpdateColorCommand < OrganizationCommand
         attr_reader :color_settings
         def initialize(color_settings)
           @color_settings = with_defaults(color_settings.to_h.with_indifferent_access)

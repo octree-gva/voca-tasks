@@ -1,7 +1,7 @@
 module Decidim
   module Voca
     module Organization
-      class UpdateFeatureCommand < UpdateOrganizationCommand
+      class UpdateFeatureCommand < OrganizationCommand
         attr_reader :feature_settings
         def initialize(feature_settings)
           @feature_settings = with_enums(

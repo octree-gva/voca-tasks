@@ -26,6 +26,7 @@ module Decidim
         ).seed
       end
 
+
       def set_settings
         ::Decidim::Voca::Rpc::SetSettings.new(
           message,
