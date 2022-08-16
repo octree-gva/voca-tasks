@@ -1,7 +1,7 @@
 module Decidim
   module Voca
     module Organization
-      class UpdateOrganizationCommand < Rectify::Command
+      class OrganizationCommand < Rectify::Command
         def organization
           @organization ||= ::Decidim::Organization.first
         end

@@ -1,7 +1,7 @@
 module Decidim
   module Voca
     module Organization
-      class UpdateLocaleCommand < UpdateOrganizationCommand
+      class UpdateLocaleCommand < OrganizationCommand
         attr_reader :locale_settings
         def initialize(locale_settings)
           @locale_settings = locale_settings.to_h

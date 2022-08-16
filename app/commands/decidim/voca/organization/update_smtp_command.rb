@@ -1,7 +1,7 @@
 module Decidim
   module Voca
     module Organization
-      class UpdateSmtpCommand < UpdateOrganizationCommand
+      class UpdateSmtpCommand < OrganizationCommand
         attr_reader :smtp_settings
         def initialize(smtp_settings)
           @smtp_settings = transform_settings(smtp_settings.to_h.with_indifferent_access)

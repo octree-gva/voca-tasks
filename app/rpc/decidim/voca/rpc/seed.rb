@@ -98,7 +98,7 @@ module Decidim
           end
 
           def migrate_db!
-            Rake::Task["db:migrate"].invoke
+            `bundle exec rails db:migrate`
           end
       end
     end

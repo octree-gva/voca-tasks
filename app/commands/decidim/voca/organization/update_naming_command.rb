@@ -1,7 +1,7 @@
 module Decidim
   module Voca
     module Organization
-      class UpdateNamingCommand < UpdateOrganizationCommand
+      class UpdateNamingCommand < OrganizationCommand
         attr_reader :naming_settings
         def initialize(naming_settings)
           @naming_settings = naming_settings.to_h

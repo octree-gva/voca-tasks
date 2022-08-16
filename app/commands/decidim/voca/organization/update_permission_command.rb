@@ -1,7 +1,7 @@
 module Decidim
   module Voca
     module Organization
-      class UpdatePermissionCommand < UpdateOrganizationCommand
+      class UpdatePermissionCommand < OrganizationCommand
         attr_reader :permission_settings
         def initialize(permission_settings)
           @permission_settings = cast_permission_settings(permission_settings.to_h)
