@@ -19,7 +19,7 @@ module Decidim
         private
 
           def hmac_key
-            @hmac_key ||= ENV.fetch("WEBHOOK_HMAC")
+            @hmac_key ||= ENV.fetch("WEBHOOK_HMAC", "insecure_secret")
           end
 
           def content
