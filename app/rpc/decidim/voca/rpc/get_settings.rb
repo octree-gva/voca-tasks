@@ -75,7 +75,7 @@ module Decidim
 
           def smtp_settings
             active_mailer_config = Rails.configuration.action_mailer.smtp_settings || {}
-            tenant_config = organization.smtp_settings
+            tenant_config = organization.smtp_settings || {}
             from = tenant_config.fetch("from", active_mailer_config.fetch(:from, ""))
 
             email = Mail::Address.new(from)

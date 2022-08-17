@@ -33,7 +33,7 @@ module Decidim
             )
             if from_email.blank? && !from_label.blank?
               active_mailer_config = Rails.configuration.action_mailer.smtp_settings || {}
-              current = organization.smtp_settings
+              current = organization.smtp_settings || {}
               from = Mail::Address.new(
                 current.fetch("from", active_mailer_config.fetch(:from, "example@decidim.org"))
               )
