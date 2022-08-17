@@ -16,7 +16,7 @@ module Decidim
       end
 
       def compile_assets
-        Rake::Task["assets:precompile"].invoke
+        `bundle exec rails assets:precompile`
         nil
       end
 
