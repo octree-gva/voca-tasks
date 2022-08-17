@@ -14,8 +14,8 @@ module Decidim
         # @returns nil
         def seed
           # If an organization is already present, should not seed.
-          return if ::Decidim::Organization.count > 0
           migrate_db!
+          return if ::Decidim::Organization.count > 0
           seed_system_admin!
           seed_organization!
           seed_admin!
@@ -52,7 +52,7 @@ module Decidim
           end
           
           def seed_admin!
-            password = Devise.friendly_token.first(12)
+            password = ::Devise.friendly_token.first(12)
             organization = ::Decidim::Organization.first
             email = message.admin_email
             matches = email[/[^@]+/].split(".").map { |n| n.gsub(/[^[:alnum:]]/, "") }
