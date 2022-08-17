@@ -93,12 +93,16 @@ module Decidim
               from_email: current_settings[:from_email],
               address: current_settings[:address],
               port: current_settings[:port],
-              authentication: current_settings[:authentication],
+              authentication: EnumCasting.smtp_authentication.decidim_to_rpc(
+                current_settings[:authentication] || "plain"
+              ),
               username: current_settings[:user_name],
               password: current_settings[:password],
               domain: current_settings[:domain],
               enable_starttls_auto: current_settings[:enable_starttls_auto],
-              openssl_verify_mode: current_settings[:openssl_verify_mode]
+              openssl_verify_mode: EnumCasting.smtp_openssl_verify_mode.decidim_to_rpc(
+                current_settings[:openssl_verify_mode] || "peer"
+              )
             )
           end
 
@@ -107,7 +111,7 @@ module Decidim
               force_users_to_authenticate_before_access_organization:
                 organization.force_users_to_authenticate_before_access_organization,
               users_registration_mode: EnumCasting.users_registration_mode.decidim_to_rpc(
-                organization.users_registration_mode
+                organization.users_registration_mode || "enabled"
               )
             )
           end
