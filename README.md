@@ -17,23 +17,31 @@ Voca focuses on Decidim, released on [APGL-3 open-source license](LICENSE.md) an
 | [voca-tasks](https://github.com/octree-gva/voca-tasks)   | Gem embedded in our Decidim image. Manipulate and manage decidim instances. | v0.1.0         |
 | [voca-jps](https://github.com/octree-gva/voca-jps)       | Jelastic Manifest to deploy Decidim images                                  | v0.1.0         |
 | [voca-docker](https://github.com/octree-gva/voca-docker) | Build Decidim docker images for Voca                                        | v0.1.0         |
+| [voca-protos](https://github.com/octree-gva/voca-protos) | RPC prototypes for voca                                        | v0.1.0         |
 
 # Decidim::Voca
 
-This Gem allows configuring a Decidim instance with gRPC. This is a domain-specific gem, which is useful only if you host your own Voca.
+This Gem allows configuring a Decidim instance with gRPC. This is a domain-specific gem, which is useful only if you host your own Voca system.
 
-## Update gRPC `.proto`
+## Readings before starting
 
-To get the last gRPC `.proto`, execute the following command:
+* [gruf, a RPC gem for rails](https://github.com/bigcommerce/gruf)
+* [GRPC for ruby](https://grpc.io/docs/languages/ruby/)
+* [proto3 Styleguide](https://developers.google.com/protocol-buffers/docs/style)
 
-```ruby
-bundle exec rake update_voca_proto
+## Repository structure
 
-#   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-#                                  Dload  Upload   Total   Spent    Left  Speed
-#   0     0    0     0    0     0      0      0 --:--:-- -100  1883  100  1883    0     0   7354      0
-# ✅ /lib/decidim/decidim-voca/grpc udpated
-```
+### Generated client
+The client is generated with `bundle exec rake update_voca_proto`, and
+save the client and service in [`/lib/decidim/voca/rpc`](./lib/decidim/voca/rpc)
+
+### RPC Decidim Service
+The entry point for RPC Decidim Service is in [`/app/rpc/decidim/voca/decidim_service_controller.rb`](./app/rpc/decidim/voca/decidim_service_controller.rb).
+This controller have a method per registered message, and will call some concerns in the `/app/rpc/decidim/voca/rpc` folder.
+
+### Updating commands
+We use Rectify::Command in `/app/commmands/decidim/voca` for all update-related command.
+
 
 ## Installation
 
@@ -48,25 +56,6 @@ And then execute:
 ```sh
 bundle install
 ```
-
-## Usage: Tasks
-
-- **`rails voca:backup`** execute a backup of your db and public/uploads folder
-- **`rails voca:webhook payload="<JSON_STRING>" name="<EVENT_NAME>" now="false"`** call the strapi with a payload
-  - `payload`
-    > a JSON string to send to the voca service
-  - `name`
-    > an event name, like `decidim.install`
-  - `now`
-    > _(optional)_ if the webhook should be send now instead of enqueued.
-    > Default: `false`
-- **`rails voca:command name="<COMMAND_NAME>" vars="<JSON INPUTS>"`** enqueue an active job to execute a rake task
-  - `name`
-    > the name of voca:\* command.
-    > Default: `backup`
-  - `vars`
-    > JSON string of the args to pass.
-    > Example: "{\"foo\": \"bar\", \"now\": \"true\"}" will pass `foo="bar" now="true"` to the command
 
 ## Development
 
