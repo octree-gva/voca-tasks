@@ -14,7 +14,6 @@ module Decidim
         # @returns nil
         def seed
           # If an organization is already present, should not seed.
-          migrate_db!
           return if ::Decidim::Organization.count > 0
           seed_system_admin!
           seed_organization!
@@ -99,9 +98,6 @@ module Decidim
             )
           end
 
-          def migrate_db!
-            `bundle exec rails db:migrate`
-          end
       end
     end
   end

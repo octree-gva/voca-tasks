@@ -21,6 +21,7 @@ module Decidim
       end
 
       def seed
+        `bundle exec rails db:migrate`
         ::Decidim::Voca::Rpc::Seed.new(
           message
         ).seed
