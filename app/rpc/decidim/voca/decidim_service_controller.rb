@@ -39,7 +39,6 @@ module Decidim
 
       private
         def invoke!(task_name)
-          App::Application.load_tasks
           Rake::Task[task_name].invoke
         end
         def message
