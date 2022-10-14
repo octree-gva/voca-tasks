@@ -18,7 +18,6 @@ module Decidim
           seed_system_admin!
           seed_organization!
           seed_admin!
-          ::Google::Protobuf::Empty
         end
 
         private

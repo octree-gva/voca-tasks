@@ -25,6 +25,7 @@ module Decidim
         ::Decidim::Voca::Rpc::Seed.new(
           message
         ).seed
+        ::Google::Protobuf::Empty
       end
 
 
