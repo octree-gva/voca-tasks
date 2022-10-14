@@ -16,12 +16,12 @@ module Decidim
       end
 
       def compile_assets
-        invoke!("assets:precompile")
+        `bundle exec rails assets:precompile`
         ::Google::Protobuf::Empty
       end
-
+      
       def seed
-        invoke!("db:migrate")
+        `bundle exec rails db:migrate`
         ::Decidim::Voca::Rpc::Seed.new(
           message
         ).seed
@@ -38,9 +38,7 @@ module Decidim
       end
 
       private
-        def invoke!(task_name)
-          Rake::Task[task_name].invoke
-        end
+
         def message
           request.message
         end
