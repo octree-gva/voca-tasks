@@ -13,11 +13,13 @@ module Decidim
         # migrate the database and insert default values.
         # @returns nil
         def seed
+           Rake::Task["db:migrate"].invoke
           # If an organization is already present, should not seed.
           return if ::Decidim::Organization.count > 0
           seed_system_admin!
           seed_organization!
           seed_admin!
+          ::Google::Protobuf::Empty
         end
 
         private
