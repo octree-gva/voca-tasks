@@ -17,7 +17,7 @@ module Decidim
 
       def compile_assets
         `bundle exec rails assets:precompile`
-        ::Google::Protobuf::Empty
+        ::Google::Protobuf::Empty.new
       end
       
       def seed
@@ -25,7 +25,7 @@ module Decidim
         ::Decidim::Voca::Rpc::Seed.new(
           message
         ).seed
-        ::Google::Protobuf::Empty
+        ::Google::Protobuf::Empty.new
       end
 
 
