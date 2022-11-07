@@ -34,6 +34,7 @@ module Decidim
           message,
           organization
         ).set_settings
+        ::Google::Protobuf::Empty.new
       rescue ActiveRecord::RecordNotFound => _e
         fail!(:not_found, :organization_not_found, "No organization is ready, have you seeded?")
       end
