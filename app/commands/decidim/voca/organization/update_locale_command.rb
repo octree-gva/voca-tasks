@@ -18,8 +18,8 @@ module Decidim
         private
 
           def after_updating_languages
-            # TODO run re-indexing if needed.
-            # TODO enqueue a check on i18ntasks to report any issues
+            `bundle exec rake decidim:locales:sync_all`
+            `bundle exec rake decidim:locales:rebuild_search`
           end
       end
     end
