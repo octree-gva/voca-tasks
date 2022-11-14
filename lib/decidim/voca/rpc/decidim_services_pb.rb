@@ -14,12 +14,13 @@ module VocaDecidim
       self.unmarshal_class_method = :decode
       self.service_name = 'voca_decidim.Decidim'
 
+      # region/Settings
       rpc :GetSettings, ::Google::Protobuf::Empty, ::VocaDecidim::GetSettingsResponse
       rpc :SetSettings, ::VocaDecidim::SetSettingsRequest, ::Google::Protobuf::Empty
-      rpc :Seed, ::VocaDecidim::SeedRequest, ::Google::Protobuf::Empty
+      # region/Seed
       rpc :CompileAssets, ::Google::Protobuf::Empty, ::Google::Protobuf::Empty
-      rpc :Backup, ::Google::Protobuf::Empty, ::Google::Protobuf::Empty
-      rpc :ConfigBackup, ::VocaDecidim::BackupCredentialsReq, ::Google::Protobuf::Empty
+      rpc :SetupDb, ::Google::Protobuf::Empty, ::Google::Protobuf::Empty
+      rpc :SeedAdmin, ::VocaDecidim::SeedAdminRequest, ::VocaDecidim::SeedAdminResponse
     end
 
     Stub = Service.rpc_stub_class

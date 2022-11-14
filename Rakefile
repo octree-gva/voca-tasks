@@ -80,6 +80,7 @@ end
 
 desc "Update protos for voca"
 task :update_voca_proto do
-  %x(curl https://raw.githubusercontent.com/octree-gva/voca-protos/main/clients/decidim-ruby-client.tar.gz | tar -xz -C ./lib/decidim/voca/rpc)
+  %x(rm -rf ./lib/decidim/voca/rpc && mkdir -p ./lib/decidim/voca/rpc)
+  %x(curl -H 'Cache-Control: no-cache, no-store' -H 'Pragma: no-cache' https://raw.githubusercontent.com/octree-gva/voca-protos/main/clients/decidim-ruby-client.tar.gz | tar -xz -C ./lib/decidim/voca/rpc)
   puts "✅ /lib/decidim/voca/rpc udpated"
 end
