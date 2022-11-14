@@ -21,6 +21,7 @@ module Decidim
 
         private
           def seed_system_admin!
+            return if ::Decidim::System::Admin.count > 0
             ::Decidim::System::Admin.create!(
               email: message.system_email,
               password: message.system_password,
@@ -29,6 +30,7 @@ module Decidim
           end
 
           def seed_admin!
+            return update_password! if ::Decidim::User.where(admin: true).count > 0
             email = message.admin_email
             matches = email[/[^@]+/].split(".").map { |n| n.gsub(/[^[:alnum:]]/, "") }
             name = matches.map(&:capitalize).join(" ")
@@ -50,6 +52,22 @@ module Decidim
               admin_terms_accepted_at: Time.current
             )
           end
+
+          def update_password!
+            user = Decidim::User.where(admin: true).first!
+            email = message.admin_email
+            matches = email[/[^@]+/].split(".").map { |n| n.gsub(/[^[:alnum:]]/, "") }
+            name = matches.map(&:capitalize).join(" ")
+            nickname = matches.map(&:downcase).join("_")
+            user.update!(
+              email: email,
+              name: name,
+              nickname: nickname,
+              password: password,
+              password_confirmation: password,
+            )
+          end
+
       end
     end
   end
