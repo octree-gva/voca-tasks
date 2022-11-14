@@ -3,12 +3,13 @@
 require "spec_helper"
 
 module Decidim::Voca
-describe Decidim::Voca::DecidimServiceController do
+  describe Decidim::Voca::DecidimServiceController do
     let(:empty) { ::Google::Protobuf::Empty.new }
+    
     def subject(options)
       run_rpc(
-        :Seed,
-        ::VocaDecidim::SeedRequest.new(options)
+        :SeedAdmin,
+        ::VocaDecidim::SeedAdminRequest.new(options)
       )
     end
 
@@ -23,18 +24,27 @@ describe Decidim::Voca::DecidimServiceController do
       http_net = class_double("Net::HTTP").as_stubbed_const()
       allow(http_net).to receive(:new).and_return(net_stub)
       DatabaseCleaner.clean
+      ::Decidim::Organization.create!(
+        host: "localhost",
+        name: "parked instance",
+        default_locale: :en,
+        available_locales: [:en],
+        reference_prefix: "DOC",
+        available_authorizations: [],
+        users_registration_mode: :enabled,
+        tos_version: Time.current,
+        badges_enabled: true,
+        user_groups_enabled: true,
+        send_welcome_notification: true,
+        file_upload_settings: ::Decidim::OrganizationSettings.default(:upload)
+      )
     end
 
     let(:valid_options) do
       {
           system_email: "system_admin_email@example.com",
           system_password: "system_admin_password",
-          admin_email: "admin@example.com",
-          name: "org_name",
-          short_name: "org_prefix",
-          host: "host",
-          default_locale: "en",
-          available_locales: "en,es"
+          admin_email: "admin@example.com"
       }
     end
 
@@ -45,40 +55,19 @@ describe Decidim::Voca::DecidimServiceController do
       expect(Decidim::System::Admin.first.email).to eq "system_admin_email@example.com"
     end
 
-    it "creates an organization with given attribute org_name, host, org_prefix" do
-      expect do
-        subject(valid_options)
-      end.to change { Decidim::Organization.count }.from(0).to(1)
-      expect(Decidim::Organization.first.host).to eq "host"
-      expect(Decidim::Organization.first.name).to eq "org_name"
-      expect(Decidim::Organization.first.reference_prefix).to eq "org_prefix"
-    end
-
-    it "defines basic content blocks" do
-      expect do
-        subject(valid_options)
-      end.to change { Decidim::ContentBlock.count }.by_at_least(2)
-    end
-
-    it "creates a help page" do
-      expect do
-        subject(valid_options)
-      end.to change { Decidim::StaticPage.where(slug: "help").count }.from(0).to(1)
-    end
-
-    it "creates a term and conditions page" do
-      expect do
-        subject(valid_options)
-      end.to change { Decidim::StaticPage.where(slug: "terms-and-conditions").count }.by(1)
-    end
-
     describe "admin creation:" do
+
       it "creates an admin" do
         expect do
           subject(valid_options)
         end.to change { Decidim::User.where(admin: true).count }.from(0).to(1)
       end
 
+      it "returns admin credential" do 
+        response = subject(valid_options)
+        expect(response.admin_email).to eq("admin@example.com")
+        expect(response.admin_password.size).to be > 0
+      end
       it "send a webhook to the main service with credentials" do
         expect(Decidim::Voca::WebhookNotifierJob).to receive(:perform_now).with(
           {

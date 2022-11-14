@@ -78,19 +78,14 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :enable_machine_translations, :bool, 4
       optional :machine_translation_display_priority, :enum, 5, "voca_decidim.SETTINGS_MACHINE_TRANSLATION_PRIORITY_OPTION"
     end
-    add_message "voca_decidim.SeedRequest" do
+    add_message "voca_decidim.SeedAdminRequest" do
       optional :admin_email, :string, 1
-      optional :host, :string, 2
-      optional :name, :string, 3
-      optional :short_name, :string, 4
-      optional :default_locale, :string, 5
-      optional :available_locales, :string, 6
-      optional :system_email, :string, 7
-      optional :system_password, :string, 8
+      optional :system_email, :string, 2
+      optional :system_password, :string, 3
     end
-    add_message "voca_decidim.BackupCredentialsReq" do
-      optional :cypherKey, :string, 1
-      optional :cypherIV, :string, 2
+    add_message "voca_decidim.SeedAdminResponse" do
+      optional :admin_email, :string, 1
+      optional :admin_password, :string, 2
     end
     add_enum "voca_decidim.SETTINGS_REGISTER_MODE_OPTION" do
       value :SETTINGS_REGISTER_MODE_REGISTER_AND_LOGIN, 0
@@ -124,8 +119,8 @@ module VocaDecidim
   DecidimOrganizationColorSettings = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("voca_decidim.DecidimOrganizationColorSettings").msgclass
   DecidimOrganizationFileUploadSettings = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("voca_decidim.DecidimOrganizationFileUploadSettings").msgclass
   DecidimOrganizationFeatureFlagSettings = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("voca_decidim.DecidimOrganizationFeatureFlagSettings").msgclass
-  SeedRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("voca_decidim.SeedRequest").msgclass
-  BackupCredentialsReq = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("voca_decidim.BackupCredentialsReq").msgclass
+  SeedAdminRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("voca_decidim.SeedAdminRequest").msgclass
+  SeedAdminResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("voca_decidim.SeedAdminResponse").msgclass
   SETTINGS_REGISTER_MODE_OPTION = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("voca_decidim.SETTINGS_REGISTER_MODE_OPTION").enummodule
   SETTINGS_SMTP_AUTHENTICATION_OPTION = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("voca_decidim.SETTINGS_SMTP_AUTHENTICATION_OPTION").enummodule
   SETTINGS_SMTP_OPENSSL_OPTION = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("voca_decidim.SETTINGS_SMTP_OPENSSL_OPTION").enummodule

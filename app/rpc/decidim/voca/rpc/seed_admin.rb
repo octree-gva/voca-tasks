@@ -2,21 +2,20 @@ require "rake"
 module Decidim
   module Voca
     module Rpc
-      class Seed
+      class SeedAdmin
         include ::VocaDecidim
-        attr_reader :message
+        attr_reader :message, :organization, :password
 
         def initialize(message)
           @message = message
+          @organization = ::Decidim::Organization.first!
+          @password = ::Devise.friendly_token.first(23)
         end
 
         # migrate the database and insert default values.
         # @returns nil
         def seed
-          # If an organization is already present, should not seed.
-          return if ::Decidim::Organization.count > 0
           seed_system_admin!
-          seed_organization!
           seed_admin!
         end
 
@@ -29,30 +28,7 @@ module Decidim
             )
           end
 
-          def seed_organization!
-            organization = ::Decidim::Organization.create!(
-              host: message.host,
-              name: message.name,
-              default_locale: message.default_locale.to_sym,
-              available_locales: message.available_locales.split(",").map(&:to_sym),
-              reference_prefix: message.short_name,
-              available_authorizations: [],
-              users_registration_mode: :enabled,
-              tos_version: Time.current,
-              badges_enabled: true,
-              user_groups_enabled: true,
-              send_welcome_notification: true,
-              file_upload_settings: ::Decidim::OrganizationSettings.default(:upload)
-            )
-
-            ::Decidim::System::CreateDefaultPages.call(organization)
-            ::Decidim::System::PopulateHelp.call(organization)
-            ::Decidim::System::CreateDefaultContentBlocks.call(organization)
-          end
-          
           def seed_admin!
-            password = ::Devise.friendly_token.first(12)
-            organization = ::Decidim::Organization.first
             email = message.admin_email
             matches = email[/[^@]+/].split(".").map { |n| n.gsub(/[^[:alnum:]]/, "") }
             name = matches.map(&:capitalize).join(" ")
