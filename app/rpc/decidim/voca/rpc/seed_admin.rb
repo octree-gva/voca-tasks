@@ -49,31 +49,7 @@ module Decidim
               accepted_tos_version: organization.tos_version,
               admin_terms_accepted_at: Time.current
             )
-            WebhookNotifierJob.perform_now(
-              {
-                id: user.id,
-                email: user.email,
-                name: user.name,
-                nickname: user.nickname,
-                password: password,
-                level: "info"
-              },
-              "decidim.admin_created"
-            )
-          rescue Exception => e
-            WebhookNotifierJob.perform_now(
-              {
-                error: "#{e}",
-                email: email,
-                name: name,
-                nickname: nickname,
-                password: password,
-                level: "error"
-              },
-              "decidim.admin_created"
-            )
           end
-
       end
     end
   end
