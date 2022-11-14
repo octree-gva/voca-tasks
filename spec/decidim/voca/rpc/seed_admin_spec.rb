@@ -68,20 +68,6 @@ module Decidim::Voca
         expect(response.admin_email).to eq("admin@example.com")
         expect(response.admin_password.size).to be > 0
       end
-      it "send a webhook to the main service with credentials" do
-        expect(Decidim::Voca::WebhookNotifierJob).to receive(:perform_now).with(
-          {
-            id: 1,
-            email: "admin@example.com",
-            password: anything,
-            nickname: "admin",
-            name: "Admin",
-            level: "info"
-          },
-          "decidim.admin_created"
-        )
-        subject(valid_options)
-      end
     end
   end
 end
