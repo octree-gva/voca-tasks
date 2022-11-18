@@ -8,14 +8,11 @@ module Decidim
         end
 
         def call
-          settings = organization.smtp_settings.merge(
-            smtp_settings.delete_if { |_k, v| v.blank? }
-          )
           organization.update!(
-            smtp_settings: settings
+            smtp_settings: smtp_settings.delete_if { |_k, v| v.blank? }
           )
           broadcast(:ok)
-        rescue e
+        rescue => e
           Rails.logger.error(e)
           broadcast(:fail)
         end
