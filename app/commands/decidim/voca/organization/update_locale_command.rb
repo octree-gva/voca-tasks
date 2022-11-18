@@ -20,6 +20,10 @@ module Decidim
           def after_updating_languages
             `bundle exec rake decidim:locales:sync_all`
             `bundle exec rake decidim:locales:rebuild_search`
+            org = organization.reload
+            ::Decidim::User.where.not(locale: org.available_locales).each do |user|
+              user.update!(locale: org.default_locale)
+            end
           end
       end
     end
