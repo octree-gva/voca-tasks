@@ -78,6 +78,7 @@ describe Decidim::Voca::DecidimServiceController do
         }.to("disabled")
       end
     end
+
     context ".smtp_settings" do
       context "smtp_settings is empty" do
         before(:each) { organization.update(smtp_settings: {}) }
@@ -93,6 +94,27 @@ describe Decidim::Voca::DecidimServiceController do
           end.to change {
             organization.reload.smtp_settings["from"]
           }.to("JohnDoe <example@decidim.org>")
+        end
+
+        it "work without domain" do
+          smtp_settings = ::VocaDecidim::DecidimOrganizationSMTPSettings.new(
+            from_label: "Hadrien",
+            from_email: "hadrien@octree.ch",
+            address: "mail.infomaniak.com",
+            port: "587",
+            authentication: "SETTINGS_SMTP_AUTHENTICATION_PLAIN",
+            username: "hadrien@octree.ch",
+            password: "my#insecure!Password",
+            domain: ""
+          )
+          expect do
+            set_settings(
+              smtp_settings: smtp_settings
+            )
+          end.to change {
+            organization.reload.smtp_settings["from"]
+          }.to("Hadrien <hadrien@octree.ch>")
+
         end
       end
       context "smtp_settings is defined" do
@@ -116,6 +138,8 @@ describe Decidim::Voca::DecidimServiceController do
             organization.reload.smtp_settings["from"]
           }.to("JohnDoe <test@decidim.org>")
         end
+
+
       end
     end
 
