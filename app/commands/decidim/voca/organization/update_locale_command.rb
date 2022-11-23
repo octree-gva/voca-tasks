@@ -9,6 +9,7 @@ module Decidim
 
         def call
           organization.update!(locale_settings.delete_if { |_k, v| v.blank? })
+          after_updating_languages
           broadcast(:ok)
         rescue StandardError => e
           Rails.logger.error(e)
