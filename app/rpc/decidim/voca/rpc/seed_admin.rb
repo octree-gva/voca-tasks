@@ -54,7 +54,7 @@ module Decidim
           end
 
           def update_password!
-            user = Decidim::User.where(admin: true).first!
+            user = ::Decidim::User.where(admin: true).first!
             email = message.admin_email
             matches = email[/[^@]+/].split(".").map { |n| n.gsub(/[^[:alnum:]]/, "") }
             name = matches.map(&:capitalize).join(" ")
