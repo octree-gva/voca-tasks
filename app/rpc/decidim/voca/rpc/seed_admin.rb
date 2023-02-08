@@ -34,7 +34,7 @@ module Decidim
             email = message.admin_email
             matches = email[/[^@]+/].split(".").map { |n| n.gsub(/[^[:alnum:]]/, "") }
             name = matches.map(&:capitalize).join(" ")
-            nickname = matches.map(&:downcase).join("_")
+            nickname = matches.map(&:downcase).join("_").truncate(19, omission: "")
             user = ::Decidim::User.create!(
               email: email,
               name: name,
@@ -58,7 +58,7 @@ module Decidim
             email = message.admin_email
             matches = email[/[^@]+/].split(".").map { |n| n.gsub(/[^[:alnum:]]/, "") }
             name = matches.map(&:capitalize).join(" ")
-            nickname = matches.map(&:downcase).join("_")
+            nickname = matches.map(&:downcase).join("_").truncate(19, omission: "")
             user.update!(
               email: email,
               name: name,
