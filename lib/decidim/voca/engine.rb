@@ -14,9 +14,6 @@ module Decidim
         # root to: "voca#index"
       end
 
-      initializer "decidim_voca.assets" do |app|
-        app.config.assets.precompile += %w[decidim_voca_manifest.js decidim_voca_manifest.css]
-      end
       initializer "decidim_voca.gruf" do |app|
         ::Gruf.configure do |c|
           c.server_binding_url = ENV.fetch("GRPC_HOST", "0.0.0.0") + ":" + ENV.fetch("GRPC_PORT", "4445")
