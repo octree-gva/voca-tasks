@@ -2,7 +2,7 @@
 
 source "https://rubygems.org"
 
-gem "decidim", "0.24.3"
+gem "decidim", "0.26.4"
 gem "decidim-voca", path: "."
 
 gem "aws-sdk-s3", "~> 1"
@@ -13,7 +13,7 @@ group :development, :test do
   gem "faker", "~> 2.14"
   gem "byebug", "~> 11.0", platform: :mri
 
-  gem "decidim-dev", "0.24.3"
+  gem "decidim-dev", "0.26.4"
   gem "listen", "~> 3.1"
   gem "spring", "~> 2.0"
   gem 'spring-commands-rspec'
