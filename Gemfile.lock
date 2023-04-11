@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    decidim-voca (0.0.6)
+    decidim-voca (0.26.4)
       aws-sdk-s3 (~> 1)
       gruf (~> 2.14, >= 2.14.1)
 
@@ -511,7 +511,6 @@ GEM
       tomlrb
     mixlib-shellout (3.2.7)
       chef-utils
-    mock_redis (0.37.0)
     msgpack (1.7.0)
     multi_xml (0.6.0)
     mustache (1.1.1)
@@ -799,7 +798,6 @@ GEM
 
 PLATFORMS
   x86_64-darwin-21
-  x86_64-darwin-22
 
 DEPENDENCIES
   aws-sdk-s3 (~> 1)
