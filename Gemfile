@@ -16,7 +16,6 @@ group :development, :test do
   gem "decidim-dev", "0.26.4"
   gem "listen", "~> 3.1"
   gem "spring", "~> 2.0"
-  gem 'spring-commands-rspec'
   gem "spring-watcher-listen", "~> 2.0"
 end
 
