@@ -59,13 +59,16 @@ module Decidim
             matches = email[/[^@]+/].split(".").map { |n| n.gsub(/[^[:alnum:]]/, "") }
             name = matches.map(&:capitalize).join(" ")
             nickname = matches.map(&:downcase).join("_").truncate(19, omission: "")
-            user.update!(
+            user.skip_confirmation_notification!
+            user.skip_confirmation!
+            user.update(
               email: email,
               name: name,
               nickname: nickname,
               password: password,
               password_confirmation: password,
             )
+            user.confirm
           end
 
       end
