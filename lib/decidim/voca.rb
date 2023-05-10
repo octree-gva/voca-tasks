@@ -12,6 +12,7 @@ require_relative "voca/backup/app_encrypt_backup_file"
 require_relative "voca/backup/app_decrypt_backup_file"
 require_relative "voca/updater"
 require_relative "voca/rpc/decidim_services_pb"
+require_relative "voca/middleware/dynamic_config_middleware"
 
 require "active_support/core_ext"
 module Decidim
