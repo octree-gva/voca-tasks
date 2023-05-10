@@ -4,7 +4,7 @@
 module Decidim
   module Voca
     def self.version
-      ENV.fetch("DECIDIM_VERSION", "0.24.3")
+      ENV.fetch("DECIDIM_VERSION", "0.26.4")
     end
   end
 end

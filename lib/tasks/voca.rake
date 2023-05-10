@@ -59,6 +59,7 @@ namespace :voca do
     end
   end
 
+
   desc "Execute a command "
   task command: :environment do
     vars = JSON[ENV.fetch("vars", "{}")]
