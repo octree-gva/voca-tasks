@@ -2,7 +2,7 @@
 # Source: decidim.proto for package 'voca_decidim'
 
 require 'grpc'
-require_relative 'decidim_pb'
+require_relative './decidim_pb'
 
 module VocaDecidim
   module Decidim

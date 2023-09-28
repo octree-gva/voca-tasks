@@ -23,4 +23,5 @@ group :test do
   gem "database_cleaner-active_record"
   gem "codecov", require: false
   gem 'gruf-rspec', require: false
+  gem "mock_redis", require: false
 end

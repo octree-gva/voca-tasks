@@ -118,9 +118,15 @@ module Decidim
 
 
           def locale_settings
+            redis_client = Redis.new(
+              url: ENV.fetch("REDIS_CONFIG_URL", "redis://127.0.0.1:6379/2"),
+            );
+            globals_config = redis_client.hgetall("config")
             DecidimOrganizationLocaleSettings.new(
               default_locale: organization.default_locale,
-              available_locales: organization.available_locales
+              available_locales: organization.available_locales,
+              currency_unit: globals_config["currency_unit"],
+              timezone: globals_config["timezone"]
             )
           end
 

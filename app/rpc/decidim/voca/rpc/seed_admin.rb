@@ -1,4 +1,3 @@
-require "rake"
 module Decidim
   module Voca
     module Rpc
@@ -70,7 +69,6 @@ module Decidim
             )
             user.confirm
           end
-
       end
     end
   end
