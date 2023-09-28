@@ -89,6 +89,9 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :admin_email, :string, 1
       optional :admin_password, :string, 2
     end
+    add_message "voca_decidim.PingResponse" do
+      optional :message, :string, 1
+    end
     add_enum "voca_decidim.SETTINGS_REGISTER_MODE_OPTION" do
       value :SETTINGS_REGISTER_MODE_REGISTER_AND_LOGIN, 0
       value :SETTINGS_REGISTER_MODE_LOGIN, 1
@@ -123,6 +126,7 @@ module VocaDecidim
   DecidimOrganizationFeatureFlagSettings = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("voca_decidim.DecidimOrganizationFeatureFlagSettings").msgclass
   SeedAdminRequest = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("voca_decidim.SeedAdminRequest").msgclass
   SeedAdminResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("voca_decidim.SeedAdminResponse").msgclass
+  PingResponse = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("voca_decidim.PingResponse").msgclass
   SETTINGS_REGISTER_MODE_OPTION = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("voca_decidim.SETTINGS_REGISTER_MODE_OPTION").enummodule
   SETTINGS_SMTP_AUTHENTICATION_OPTION = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("voca_decidim.SETTINGS_SMTP_AUTHENTICATION_OPTION").enummodule
   SETTINGS_SMTP_OPENSSL_OPTION = ::Google::Protobuf::DescriptorPool.generated_pool.lookup("voca_decidim.SETTINGS_SMTP_OPENSSL_OPTION").enummodule
