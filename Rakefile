@@ -10,7 +10,7 @@ end
 
 def seed_db(path)
   Dir.chdir(path) do
-    system("bundle exec rake db:seed")
+    system("bundle exec rails db:seed")
   end
 end
 

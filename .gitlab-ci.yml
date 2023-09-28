@@ -15,12 +15,10 @@ variables:
 
 stages:
   - test
-  - analyze
-  - version
-  - build
 
-coverage-024:
-  image: ruby:2.7.1
+
+coverage-026:
+  image: ruby:3.0.0
   stage: test
   only:
     - merge_requests
@@ -42,9 +40,15 @@ coverage-024:
     DATABASE_PASSWORD: "TEST-ohm5phaisohHie2ohh7aeweecahdoy5p"
     DATABASE_USERNAME: "decidim"
     DISABLED_DOCKER_COMPOSE: "true"
+    NODE_MAJOR: 16
   before_script:
-    - apt-get update -qq && apt-get install -y -qq nodejs
-    - gem install bundler -v 2.3.6
+    - apt-get update -qq && apt-get install -y ca-certificates curl gnupg
+    - mkdir -p /etc/apt/keyrings
+    - curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+    - echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_16.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
+    - apt-get update && apt-get install -y -qq nodejs
+    - npm install -g yarn --force
+    - gem install bundler
     - bundle config set path 'vendor'
     - RAILS_ENV=development bundle install -j $(nproc)
     - bundle exec rake test_app

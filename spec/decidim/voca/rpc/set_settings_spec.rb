@@ -23,6 +23,7 @@ describe Decidim::Voca::DecidimServiceController do
   end
 
   context "#set_settings" do
+    
     context ".naming_settings" do
       it "updates name" do
         name_settings = ::VocaDecidim::DecidimOrganizationNamingSettings.new(name: "test")
@@ -65,6 +66,7 @@ describe Decidim::Voca::DecidimServiceController do
           organization.reload.force_users_to_authenticate_before_access_organization
         }.to(true)
       end
+
       it ".users_registration_mode" do
         permission_settings = ::VocaDecidim::DecidimOrganizationPermissionSettings.new(
           users_registration_mode: :SETTINGS_REGISTER_MODE_EXTERNAL
@@ -153,6 +155,7 @@ describe Decidim::Voca::DecidimServiceController do
         end.to change { organization.reload.colors["alert"] }.to("#400555")
       end
     end
+
     context ".file_upload_settings" do
       it "updates max file uploads" do
         file_upload_settings = ::VocaDecidim::DecidimOrganizationFileUploadSettings.new(

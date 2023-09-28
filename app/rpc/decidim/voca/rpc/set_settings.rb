@@ -41,8 +41,14 @@ module Decidim
           ] unless message.feature_settings.nil?
           error_string = response.delete_if { |k, v| v.key? :ok }.map(&:first).join(", ")
           unless error_string.empty?
-            fail!(:internal, :organization, "Following keys failed :#{error_string}")
+            raise error_string
           end
+
+          if ::Decidim::StaticPage.count < ::Decidim::StaticPage::DEFAULT_PAGES.length
+            ::Decidim::System::PopulateHelp.new(organization).call
+            ::Decidim::System::CreateDefaultPages.new(organization).call
+          end
+
         end
       end
     end
