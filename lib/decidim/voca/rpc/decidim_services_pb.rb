@@ -14,6 +14,8 @@ module VocaDecidim
       self.unmarshal_class_method = :decode
       self.service_name = 'voca_decidim.Decidim'
 
+      # region/Health
+      rpc :Ping, ::Google::Protobuf::Empty, ::VocaDecidim::PingResponse
       # region/Settings
       rpc :GetSettings, ::Google::Protobuf::Empty, ::VocaDecidim::GetSettingsResponse
       rpc :SetSettings, ::VocaDecidim::SetSettingsRequest, ::Google::Protobuf::Empty

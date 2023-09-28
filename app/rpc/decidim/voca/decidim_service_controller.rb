@@ -6,6 +6,12 @@ module Decidim
       include ::VocaDecidim
       bind ::VocaDecidim::Decidim::Service
 
+      def ping
+        ::Decidim::Voca::Rpc::Health.new(
+          message
+        ).ping
+      end
+
       def get_settings
         ::Decidim::Voca::Rpc::GetSettings.new(
           message,
