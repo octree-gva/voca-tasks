@@ -41,6 +41,8 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     add_message "voca_decidim.DecidimOrganizationLocaleSettings" do
       optional :default_locale, :string, 1
       repeated :available_locales, :string, 2
+      optional :currency_unit, :string, 3
+      optional :timezone, :string, 4
     end
     add_message "voca_decidim.DecidimOrganizationSMTPSettings" do
       optional :from_label, :string, 1

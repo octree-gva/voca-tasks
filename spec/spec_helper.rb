@@ -7,9 +7,10 @@ require "decidim/dev"
 require "decidim/core/test"
 require "database_cleaner/active_record"
 require 'gruf/rspec'
+require 'mock_redis'
 
 DatabaseCleaner.strategy = :truncation
-
+  
 require "simplecov"
 SimpleCov.start "rails"
 if ENV["CODECOV"]
@@ -26,6 +27,13 @@ ENV["DECIDIM_DEFAULT_SYSTEM_PASSWORD"] = "decidim_default_system_password"
 
 Decidim::Dev.dummy_app_path =
   File.expand_path(File.join("spec", "dummy"))
-
 require "decidim/dev/test/base_spec_helper"
+
+
+RSpec.configure do |config|
+  config.before(:each) do
+    mock_redis = MockRedis.new
+    allow(Redis).to receive(:new).and_return(mock_redis)
+  end
+end
 

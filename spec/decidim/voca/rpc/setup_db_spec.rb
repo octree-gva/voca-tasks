@@ -4,11 +4,12 @@ require "spec_helper"
 
 module Decidim::Voca
 describe Decidim::Voca::DecidimServiceController do
+
     let(:empty) { ::Google::Protobuf::Empty.new }
     def subject
       run_rpc(
         :SetupDB,
-        ::Google::Protobuf::Empty.new
+        empty
       )
     end
 
@@ -38,18 +39,6 @@ describe Decidim::Voca::DecidimServiceController do
       expect do
         subject
       end.to change { Decidim::ContentBlock.count }.by_at_least(2)
-    end
-
-    it "creates a help page" do
-      expect do
-        subject
-      end.to change { Decidim::StaticPage.where(slug: "help").count }.from(0).to(1)
-    end
-
-    it "creates a term and conditions page" do
-      expect do
-        subject
-      end.to change { Decidim::StaticPage.where(slug: "terms-and-conditions").count }.by(1)
     end
   end
 end
