@@ -7,7 +7,9 @@ module Decidim
       bind ::VocaDecidim::Decidim::Service
 
       def ping
-        ::Decidim::Voca::Rpc::Health.new.ping
+        ::VocaDecidim::PingResponse.new(
+          message: ::Decidim::Voca::Rpc::Health.new.ping
+        )
       end
 
       def get_settings
