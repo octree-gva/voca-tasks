@@ -18,5 +18,39 @@ require "active_support/core_ext"
 module Decidim
   module Voca
     class Error < StandardError; end
+    class << self
+      attr_accessor :config
+    end
+  
+    def self.configure
+      self.config ||= Configuration.new
+      yield(configuration)
+    end
+
+    def self.configuration
+      self.config ||= Configuration.new
+    end
+    
+    class Configuration
+      attr_reader :listeners
+  
+      def initialize
+        @listeners = OpenStruct.new
+      end
+      
+      ##
+      # Register a new code block for an event.
+      # Decidim::Voca.configure do |conf|
+      #   conf.on(:before_seed_db) do || 
+      def on(event, &block)
+        @listeners[event] ||= []
+        @listeners[event] << block
+      end
+
+      def trigger(event)
+        return unless @listeners[event]
+        @listeners[event].map {|bl| bl.call }
+      end
+    end
   end
 end
