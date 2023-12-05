@@ -28,7 +28,7 @@ module Decidim
           password: Decidim::AttributeEncryptor.decrypt(@organization.smtp_settings["encrypted_password"]),
           ssl: port == 465,
           enable_starttls_auto: !is_tls && port == 587
-        ) { |_k, o, v| v.presence || o }.compact_blank!
+        )  { |_k, o, v| v.presence || o }.reject! { |_k, v| v.blank? }
       end
     end
   end
