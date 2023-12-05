@@ -38,9 +38,9 @@ module Decidim
         private
           def after_updating_languages
             # Rebuild locales
-            `bundle exec rails decidim:locales:sync_all`
+            system("bundle exec rails decidim:locales:sync_all")
             # Rebuild search tree
-            `bundle exec rails decidim:locales:rebuild_search`
+            system("bundle exec rails decidim:locales:rebuild_search")
             org = organization.reload
             # Update user locales (they might not have a locale that is now supported)
             ::Decidim::User.where.not(locale: org.available_locales).each do |user|
