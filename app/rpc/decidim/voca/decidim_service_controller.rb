@@ -23,14 +23,14 @@ module Decidim
 
       def compile_assets
         ::Decidim::Voca.configuration.trigger(:before_compile_assets)
-        `bundle exec rails assets:precompile`
+        system("bundle exec rails assets:precompile")
         ::Decidim::Voca.configuration.trigger(:after_compile_assets)
         ::Google::Protobuf::Empty.new
       end
       
       def setup_db
         ::Decidim::Voca.configuration.trigger(:before_setup_db)
-        `bundle exec rails db:migrate`
+        system("bundle exec rails db:migrate")
         ::Decidim::Voca::Rpc::SetupDb.new.seed
         ::Decidim::Voca.configuration.trigger(:after_setup_db)
         ::Google::Protobuf::Empty.new

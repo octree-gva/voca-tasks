@@ -9,10 +9,13 @@ module Decidim
 
         def call
           # update languages
-          organization_configuration = locale_settings.select do |key| 
+          org_locales = locale_settings.select do |key| 
             "#{key}" == "available_locales" || "#{key}" == "default_locale"
           end.delete_if { |_k, v| v.blank? }
-          organization.update!(organization_configuration)
+          # Symbolizes values
+          org_locales[:available_locales] = org_locales[:available_locales].map {|str| "#{str}".to_sym} if org_locales.key? :available_locales
+          org_locales[:default_locale] = org_locales[:default_locale].to_sym if org_locales.key? :default_locale
+          organization.update!(org_locales)
           after_updating_languages
           # update localization settings (currency, timezone)
           global_configuration = locale_settings.select do |key| 
@@ -38,9 +41,9 @@ module Decidim
         private
           def after_updating_languages
             # Rebuild locales
-            `bundle exec rails decidim:locales:sync_all`
+            system("bundle exec rails decidim:locales:sync_all")
             # Rebuild search tree
-            `bundle exec rails decidim:locales:rebuild_search`
+            system("bundle exec rails decidim:locales:rebuild_search")
             org = organization.reload
             # Update user locales (they might not have a locale that is now supported)
             ::Decidim::User.where.not(locale: org.available_locales).each do |user|
