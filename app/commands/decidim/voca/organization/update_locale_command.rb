@@ -9,13 +9,10 @@ module Decidim
 
         def call
           # update languages
-          org_locales = locale_settings.select do |key| 
+          organization_configuration = locale_settings.select do |key| 
             "#{key}" == "available_locales" || "#{key}" == "default_locale"
           end.delete_if { |_k, v| v.blank? }
-          # Symbolizes values
-          org_locales[:available_locales] = org_locales[:available_locales].map {|str| "#{str}".to_sym} if org_locales.key? :available_locales
-          org_locales[:default_locale] = org_locales[:default_locale].to_sym if org_locales.key? :default_locale
-          organization.update!(org_locales)
+          organization.update!(organization_configuration)
           after_updating_languages
           # update localization settings (currency, timezone)
           global_configuration = locale_settings.select do |key| 
