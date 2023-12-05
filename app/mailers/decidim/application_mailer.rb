@@ -20,13 +20,14 @@ module Decidim
         mail.reply_to = mail.reply_to || Decidim.config.mailer_reply
 
         port = "#{@organization.smtp_settings["port"] || "587"}".to_i
+        is_tls = mail.delivery_method.settings["tls"]
         mail.delivery_method.settings.merge!(
           address: @organization.smtp_settings["address"],
           port: @organization.smtp_settings["port"],
           user_name: @organization.smtp_settings["user_name"],
           password: Decidim::AttributeEncryptor.decrypt(@organization.smtp_settings["encrypted_password"]),
           ssl: port == 465,
-          enable_starttls_auto: port == 587
+          enable_starttls_auto: !is_tls && port == 587
         ) { |_k, o, v| v.presence || o }.compact_blank!
       end
     end
