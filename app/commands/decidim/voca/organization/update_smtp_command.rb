@@ -23,6 +23,7 @@ module Decidim
             from_label = settings.delete("from_label")
             from_email = settings.delete("from_email")
             username = settings.delete("username")
+            password = settings.delete("password")
             settings["openssl_verify_mode"] = Decidim::Voca::Rpc::EnumCasting.smtp_openssl_verify_mode.rpc_to_decidim(
               settings["openssl_verify_mode"]
             )
@@ -30,6 +31,7 @@ module Decidim
               settings["authentication"]
             )
             settings["user_name"] = username unless username.blank?
+            settings["encrypted_password"] = Decidim::AttributeEncryptor.encrypt(password) unless password.blank?
             if from_email.blank? && !from_label.blank?
               active_mailer_config = Rails.configuration.action_mailer.smtp_settings || {}
               current = organization.smtp_settings || {}
